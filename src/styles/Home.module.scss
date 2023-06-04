@@ -1,0 +1,83 @@
+@import url("https://fonts.googleapis.com/css2?family=Castoro+Titling&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap");
+
+.hero-section {
+  font-family: "Quicksand", sans-serif;
+  .hero-section-heading {
+    background: linear-gradient(45deg, #ff00cc, #4242ac);
+    background-clip: text;
+    font-family: "Castoro Titling", cursive !important;
+    color: transparent;
+    font-weight: 900 !important;
+  }
+  .btn {
+    transition: 0.3s ease-in-out;
+    background: linear-gradient(45deg, #ff00cc, #4242ac) !important;
+    &:hover {
+      scale: 1.05;
+      transform: translateY(2px);
+    }
+  }
+}
+
+.recent-post-title {
+  position: relative;
+  font-stretch: ultra-condensed;
+  font-family: "Oswald", sans-serif;
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 5px;
+    height: 5px;
+    background: linear-gradient(45deg, #ff00cc, #4242ac);
+    border-radius: 50%;
+  }
+  &::after {
+    left: 10px;
+    width: 70px;
+    height: 3.5px;
+    border-radius: 10px;
+  }
+}
+
+.tracking-in-contract-bck-bottom {
+  animation: tracking-in-contract-bck-bottom 1s
+    cubic-bezier(0.215, 0.61, 0.355, 1) both;
+}
+
+.focus-in-expand-fwd {
+  animation: focus-in-expand-fwd 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation-delay: 0.5s;
+}
+
+@keyframes tracking-in-contract-bck-bottom {
+  0% {
+    letter-spacing: 1em;
+    transform: translateZ(400px) translateY(300px);
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateZ(0) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes focus-in-expand-fwd {
+  0% {
+    letter-spacing: -0.5em;
+    transform: translateZ(-800px);
+    filter: blur(12px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateZ(0);
+    filter: blur(0);
+    opacity: 1;
+  }
+}

@@ -1,0 +1,73 @@
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap");
+.slug-main {
+  font-family: "Quicksand", sans-serif;
+}
+.card {
+  // background: linear-gradient(145deg, #121a2a, #0f1623);
+  box-shadow: 20px 20px 60px #111827, -20px -20px 60px #111827;
+  font-family: "Quicksand", sans-serif;
+}
+.title,
+.desc,
+.related-post-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+.desc {
+  -webkit-line-clamp: 4;
+}
+.related-post-title {
+  -webkit-line-clamp: 2;
+}
+
+.category,
+.related-post-heading,
+.categories-heading {
+  position: relative;
+  font-stretch: ultra-condensed;
+  font-family: "Oswald", sans-serif;
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 4px;
+    height: 4px;
+    background: linear-gradient(45deg, #ff00cc, #4242ac);
+    border-radius: 50%;
+  }
+  &::after {
+    left: 10px;
+    width: 50px;
+    height: 3px;
+    border-radius: 10px;
+  }
+}
+.categories {
+  li {
+    list-style: none;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #2a3a58;
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, #ff00cc, #4242ac);
+    }
+  }
+}
+.like-box {
+}

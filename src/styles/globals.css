@@ -2,26 +2,77 @@
 @tailwind components;
 @tailwind utilities;
 
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #b8b8b8;
+  border-radius: 10px;
+}
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --primary-color: #111827;
+  --secondary-color: #1f69ef;
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+html {
+  scroll-behavior: smooth !important;
 }
-
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  overflow-x: hidden !important;
+  background: var(--primary-color);
+}
+.swal-modal,
+.swal-icon,
+.swal-icon::before,
+.swal-icon::after,
+.swal-icon--success__hide-corners {
+  background: #1c1e24;
+}
+
+.swal-icon--success {
+  border-color: green;
+}
+.swal-icon--success__line {
+  background: green;
+}
+.swal-icon--success__ring {
+  border-color: green;
+}
+.swal-title,
+.swal-text {
+  color: #d1d1d1;
+  letter-spacing: 1px;
+}
+.swal-button--confirm {
+  background: #292c33;
+  color: #d1d1d1 !important;
+}
+.swal-button--confirm:hover {
+  background: #464b55 !important;
+}
+.swal-icon--info::before,
+.swal-icon--info::after {
+  background: white;
+}
+.swal-content__input {
+  --tw-text-opacity: 1;
+  color: rgb(243 244 246 / var(--tw-text-opacity));
+  letter-spacing: 0.05em;
+
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(55 65 81 / var(--tw-bg-opacity));
+  --tw-border-opacity: 1;
+  border-color: rgb(75 85 99 / var(--tw-border-opacity));
+  border-width: 1px;
+  border-radius: 0.5rem;
+  width: 100%;
+  padding: 0.8rem;
 }
