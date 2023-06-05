@@ -4,10 +4,12 @@ import Image from "next/image";
 import styles from "../src/styles/Navbar.module.scss";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../src/pages/firebase";
+import { useRouter } from "next/router";
 
 const Navbar = ({ progress }) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   // to show dropdown menu
   const dropdown = () => {
@@ -45,6 +47,13 @@ const Navbar = ({ progress }) => {
       setCategories(list);
     });
   }, []);
+
+  const searchHandler = (e) => {
+    if (e.key === "Enter") {
+      let searchText = e.target.value;
+      router.push(`/blog/search/${searchText}`);
+    }
+  };
   return (
     <>
       <nav
@@ -57,7 +66,7 @@ const Navbar = ({ progress }) => {
               className="h-12 mr-3"
               width={150}
               height={150}
-              priority={false}
+              priority={true}
               alt="explore blog logo"
             />
           </Link>
@@ -108,6 +117,7 @@ const Navbar = ({ progress }) => {
                 type="text"
                 id={styles["search-navbar"]}
                 className="block w-full p-2 pl-10 text-sm text-gray-100 border rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-gray-700 border-gray-600 placeholder-gray-400 tracking-wider"
+                onKeyUp={searchHandler}
                 placeholder="Search..."
               />
             </div>

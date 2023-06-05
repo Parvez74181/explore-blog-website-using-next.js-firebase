@@ -13,7 +13,7 @@ export default function CreatePost() {
     title: "",
     slug: "",
     description: "",
-    category: [],
+    category: "",
     tag: [],
   });
 

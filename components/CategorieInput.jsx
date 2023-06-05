@@ -4,7 +4,7 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../src/pages/firebase";
 
 export default function CategorieInput({ setCategory }) {
-  const [selectedCategory, setSelectedCategory] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState();
   const [categories, setCategories] = useState([]);
 
   const handleClick = (e) => {

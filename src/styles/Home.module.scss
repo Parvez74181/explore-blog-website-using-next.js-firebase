@@ -55,8 +55,8 @@
 
 @keyframes tracking-in-contract-bck-bottom {
   0% {
-    letter-spacing: 1em;
-    transform: translateZ(400px) translateY(300px);
+    letter-spacing: 0.3em;
+    transform: translateZ(400px) translateY(-300px);
     opacity: 0;
   }
   40% {

@@ -5,11 +5,11 @@ import parse from "html-react-parser";
 
 export default function Card({ postData }) {
   const { thumbnail, title, description, slug, category } =
-    postData.data.postData;
-  const { timeStamp } = postData.data;
+    postData?.data?.postData;
+  const { timeStamp } = postData?.data;
   const { id } = postData;
   const date = new Date(timeStamp);
-  let day = date.getDay();
+  let day = date.getDate();
   let months = date.getMonth();
   let year = date.getFullYear();
   if (day < 10) day = "0" + day;
