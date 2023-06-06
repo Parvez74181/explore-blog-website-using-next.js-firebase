@@ -127,7 +127,7 @@ export default function Content({ data, randomPosts }) {
                 <div
                   className={`${styles["category"]} my-5 text-sm text-gray-50 tracking-widest`}
                 >
-                  <Link href="#">{post?.data?.postData?.category[0]}</Link>
+                  <Link href="#">{post?.data?.postData?.category}</Link>
                 </div>
 
                 {/* title */}

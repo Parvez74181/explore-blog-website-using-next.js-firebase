@@ -198,7 +198,6 @@ const Navbar = ({ progress }) => {
                   Home
                 </Link>
               </li>
-
               {/* Explore */}
               <li>
                 <a
@@ -259,6 +258,19 @@ const Navbar = ({ progress }) => {
                   }}
                 >
                   Contact Us
+                </Link>
+              </li>{" "}
+              {/* admin */}
+              <li>
+                <Link
+                  href="/admin/admin-dashboard"
+                  className="block py-2 pl-3 pr-4  rounded md:p-0 md:hover:text-blue-500 text-white hover:bg-gray-700 hover:text-white md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
+                  onClick={() => {
+                    closeNavbar();
+                    progress(100);
+                  }}
+                >
+                  Admin
                 </Link>
               </li>
             </ul>

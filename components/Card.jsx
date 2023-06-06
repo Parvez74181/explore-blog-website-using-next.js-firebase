@@ -54,7 +54,7 @@ export default function Card({ postData }) {
 
           {/* author and upload time */}
           <div className="flex justify-between items-center text-gray-400">
-            <span>{category[0]}</span>
+            <span>{category}</span>
             <span>{blogUploadDate}</span>
           </div>
 
