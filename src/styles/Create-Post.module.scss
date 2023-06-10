@@ -39,8 +39,6 @@
     background-clip: text !important;
     color: transparent;
     cursor: pointer;
-    &:hover {
-    }
   }
 }
 .category-heading,
@@ -67,7 +65,7 @@
 #post-submit-button {
   span {
     &:hover {
-      background: linear-gradient(45deg, #ff00cc, #4242ac);
+      background: linear-gradient(-45deg, #ff00cc, #8d39f8);
     }
   }
 }

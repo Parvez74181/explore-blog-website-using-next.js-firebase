@@ -57,27 +57,29 @@ const Navbar = ({ progress }) => {
   return (
     <>
       <nav
-        className={`${styles["nav"]} border-gray-200 bg-gray-900 sticky top-0 z-50`}
+        className={`${styles["nav"]} border-gray-200 bg-white sticky top-0 z-50`}
       >
-        <div className="mx-auto md:mx-10  md:px-5 p-4 flex flex-wrap items-center justify-between">
+        <div className="mx-auto md:mx-10  md:px-5 p-4  flex flex-wrap items-center justify-between">
           <Link href="/" className="flex items-center">
             <Image
-              src="/logo.svg"
-              className="h-12 mr-3"
+              src="/logo.png"
+              className="h-[50px] w-[100px] mr-3"
               width={150}
-              height={150}
+              height={100}
               priority={true}
               alt="explore blog logo"
             />
           </Link>
 
           <div className="flex md:order-2">
+            {/* search icon for mobile devices */}
             <button
               type="button"
+              id="navbar-search-icon"
               data-collapse-toggle="navbar-search"
               aria-controls="navbar-search"
               aria-expanded="false"
-              className="md:hidden  text-gray-400 hover:bg-gray-700  focus:outline-none focus:ring-2 focus:ring-gray-600 rounded-lg text-sm p-2.5 mr-1"
+              className="md:hidden hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600 rounded-lg text-sm p-2.5 mr-1"
               onClick={openNavbar}
             >
               <svg
@@ -96,6 +98,7 @@ const Navbar = ({ progress }) => {
               <span className="sr-only">Search</span>
             </button>
 
+            {/* search input for large devices */}
             <div className="relative hidden md:block">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                 <svg
@@ -116,24 +119,25 @@ const Navbar = ({ progress }) => {
               <input
                 type="text"
                 id={styles["search-navbar"]}
-                className="block w-full p-2 pl-10 text-sm text-gray-100 border rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-gray-700 border-gray-600 placeholder-gray-400 tracking-wider"
+                className="block w-full p-2 pl-10 text-sm  border rounded-lg focus:ring-blue-500 focus:border-blue-500 font-normal border-gray-700 placeholder-gray-600 tracking-wider"
                 onKeyUp={searchHandler}
                 placeholder="Search..."
               />
             </div>
 
             {/* user login icon */}
-            <Link href="/login">
+            {/* <Link href="/login">
               <i
                 title="login"
-                className="fa-regular fa-circle-user text-gray-300 ps-2 md:ms-3 p-0 pt-1 mr-3 md:mr-0 text-2xl cursor-pointer"
+                className="fa-regular fa-circle-user  ps-2 md:ms-3 p-0 pt-1 mr-3 md:mr-0 text-2xl cursor-pointer"
               ></i>
-            </Link>
+            </Link> */}
 
+            {/* hamburger menu for mobile devices */}
             <button
               data-collapse-toggle="navbar-search"
               type="button"
-              className="inline-flex items-center p-2 text-sm  rounded-lg md:hidden  focus:outline-none focus:ring-2  text-gray-400 hover:bg-gray-700 focus:ring-gray-600"
+              className="inline-flex items-center p-2 text-sm  rounded-lg md:hidden  focus:outline-none focus:ring-2 focus:ring-gray-600"
               aria-controls="navbar-search"
               aria-expanded="false"
               onClick={openNavbar}
@@ -154,14 +158,16 @@ const Navbar = ({ progress }) => {
               </svg>
             </button>
           </div>
+
           <div
             className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
             id="navbar-search"
           >
+            {/* search input for mobile devices */}
             <div className="relative mt-3 md:hidden">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                 <svg
-                  className="w-5 h-5 text-gray-500"
+                  className="w-5 h-5"
                   aria-hidden="true"
                   fill="currentColor"
                   viewBox="0 0 20 20"
@@ -179,16 +185,18 @@ const Navbar = ({ progress }) => {
               <input
                 type="text"
                 // id={styles["search-navbar"]}
-                className="block w-full p-2 pl-10 text-sm  border-2 rounded-lg bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:border-blue-500 outline-none"
+                className="block w-full p-2 pl-10 text-sm  border rounded-lg border-gray-700 placeholder-gray-600 font-normal focus:border-gray-900 outline-none"
                 placeholder="Search..."
               />
             </div>
-            <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border rounded-lg md:flex-row md:space-x-8 md:mt-0 md:border-0  bg-gray-800 md:bg-gray-900 border-gray-700">
+
+            {/* naigations */}
+            <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border rounded-lg md:flex-row md:space-x-8 md:mt-0 md:border-0 bg-white">
               {/* home */}
               <li>
                 <Link
                   href="/"
-                  className="block py-2 pl-3 pr-4  rounded md:p-0 md:hover:text-blue-500 text-white hover:bg-gray-700 hover:text-white md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
+                  className="block py-2 pl-3 pr-4  rounded md:p-0 md:hover:text-blue-500 hover:bg-gray-200  md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
                   aria-current="page"
                   onClick={() => {
                     closeNavbar();
@@ -202,7 +210,7 @@ const Navbar = ({ progress }) => {
               <li>
                 <a
                   id="explore-dropdown"
-                  className="block py-2 pl-3 pr-4 cursor-pointer rounded md:p-0 md:hover:text-blue-500 text-gray-100 hover:bg-gray-700 hover:text-white md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
+                  className="block py-2 pl-3 pr-4 cursor-pointer rounded md:p-0 md:hover:text-blue-500  hover:bg-gray-200 md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
                   onClick={dropdown}
                   // onBlur={dropdown}
                 >
@@ -212,7 +220,7 @@ const Navbar = ({ progress }) => {
 
                 {/* dropdown */}
                 <div
-                  className={`hidden absolute bg-gray-700 mt-2 mx-0 px-4 p-2 w-2/4 md:w-fit text-gray-400 rounded-md dropdown`}
+                  className={`hidden absolute bg-white border shadow-md mt-2 mx-0 px-4 p-2 w-2/4 md:w-fit  rounded-md dropdown`}
                 >
                   <ul>
                     {categories?.map((category) => {
@@ -220,7 +228,7 @@ const Navbar = ({ progress }) => {
                         <li id={category.id} key={category.id}>
                           <Link
                             href={`/blog/category/${category.name}`}
-                            className="hover:text-gray-100 tracking-wide"
+                            className="hover:bg-gray-200 rounded block py-2 pl-3 pr-4 tracking-wide"
                             onClick={() => {
                               closeNavbar();
                               progress(100);
@@ -238,7 +246,7 @@ const Navbar = ({ progress }) => {
               <li>
                 <Link
                   href="#"
-                  className="block py-2 pl-3 pr-4  rounded md:p-0 md:hover:text-blue-500 text-white hover:bg-gray-700 hover:text-white md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
+                  className="block py-2 pl-3 pr-4  rounded md:p-0 md:hover:text-blue-500  hover:bg-gray-200  md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
                   onClick={() => {
                     closeNavbar();
                     progress(100);
@@ -251,7 +259,7 @@ const Navbar = ({ progress }) => {
               <li>
                 <Link
                   href="#"
-                  className="block py-2 pl-3 pr-4  rounded md:p-0 md:hover:text-blue-500 text-white hover:bg-gray-700 hover:text-white md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
+                  className="block py-2 pl-3 pr-4  rounded md:p-0 md:hover:text-blue-500 hover:bg-gray-200 md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
                   onClick={() => {
                     closeNavbar();
                     progress(100);
@@ -264,7 +272,7 @@ const Navbar = ({ progress }) => {
               <li>
                 <Link
                   href="/admin/admin-dashboard"
-                  className="block py-2 pl-3 pr-4  rounded md:p-0 md:hover:text-blue-500 text-white hover:bg-gray-700 hover:text-white md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
+                  className="block py-2 pl-3 pr-4  rounded md:p-0 md:hover:text-blue-500 hover:bg-gray-200 md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
                   onClick={() => {
                     closeNavbar();
                     progress(100);

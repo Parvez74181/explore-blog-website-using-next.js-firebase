@@ -1,21 +1,28 @@
 @import url("https://fonts.googleapis.com/css2?family=Castoro+Titling&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap");
 
 .hero-section {
   font-family: "Quicksand", sans-serif;
+  background-image: url("/hero-section-img.png");
+  position: relative;
+
   .hero-section-heading {
-    background: linear-gradient(45deg, #ff00cc, #4242ac);
-    background-clip: text;
+    // background: linear-gradient(45deg, #ff00cc, #4242ac);
+    // background-clip: text;
+    // color: transparent;
+
+    color: white;
     font-family: "Castoro Titling", cursive !important;
-    color: transparent;
     font-weight: 900 !important;
   }
   .btn {
     transition: 0.3s ease-in-out;
-    background: linear-gradient(45deg, #ff00cc, #4242ac) !important;
-    &:hover {
-      scale: 1.05;
-      transform: translateY(2px);
+    background: linear-gradient(-45deg, #ff00cc, #8d39f8) !important;
+    span {
+      transition: 0.2s;
+      &:hover {
+        color: white;
+        background: linear-gradient(-45deg, #ff00cc, #8d39f8);
+      }
     }
   }
 }
@@ -23,7 +30,7 @@
 .recent-post-title {
   position: relative;
   font-stretch: ultra-condensed;
-  font-family: "Oswald", sans-serif;
+  font-family: "dinpro", sans-serif;
   &::before,
   &::after {
     content: "";
@@ -81,3 +88,24 @@
     opacity: 1;
   }
 }
+
+// @media (prefers-color-scheme: dark) {
+//   .hero-section {
+//     .hero-section-heading {
+//       // background: linear-gradient(45deg, #ff00cc, #4242ac);
+//       // background-clip: text;
+//       // color: transparent;
+
+//       font-family: "Castoro Titling", cursive !important;
+//       font-weight: 900 !important;
+//     }
+//     .btn {
+//       transition: 0.3s ease-in-out;
+//       // background: linear-gradient(45deg, #ff00cc, #4242ac) !important;
+//       &:hover {
+//         scale: 1.05;
+//         transform: translateY(2px);
+//       }
+//     }
+//   }
+// }

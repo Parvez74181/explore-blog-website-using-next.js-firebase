@@ -93,43 +93,43 @@ export default function Editor({ setDescription }) {
     <>
       <div className="editor" style={{ width: "100%" }}>
         {/* tools */}
-        <div className="tools mb-10 flex flex-wrap gap-5 md:gap-7 text-gray-300">
+        <div className="tools mb-10 flex flex-wrap gap-5 md:gap-7 ">
           <button
             title="bold"
-            className="fa-solid fa-bold cursor-pointer border p-2 px-4 rounded-md w-12 flex justify-center items-center"
+            className="fa-solid fa-bold cursor-pointer border border-gray-700  p-2 px-4 rounded-md w-12 flex justify-center items-center bg-white "
             onClick={() => {
               format("bold");
             }}
           ></button>
           <button
             title="italic"
-            className="fa-solid fa-italic cursor-pointer border p-2 px-4 rounded-md w-12 flex justify-center items-center"
+            className="fa-solid fa-italic cursor-pointer border border-gray-700  p-2 px-4 rounded-md w-12 flex justify-center items-center bg-white "
             onClick={() => {
               format("italic");
             }}
           ></button>
           <button
             title="underline"
-            className="fa-solid fa-underline cursor-pointer border p-2 px-4 rounded-md w-12 flex justify-center items-center"
+            className="fa-solid fa-underline cursor-pointer border border-gray-700  p-2 px-4 rounded-md w-12 flex justify-center items-center bg-white "
             onClick={() => {
               format("underline");
             }}
           ></button>
           <button
             title="link"
-            className="fa-solid fa-link cursor-pointer border p-2 px-4 rounded-md w-12 flex justify-center items-center"
+            className="fa-solid fa-link cursor-pointer border border-gray-700  p-2 px-4 rounded-md w-12 flex justify-center items-center bg-white "
             onClick={insertLink}
           ></button>
           <button
             title="image"
-            className="fa-solid fa-image cursor-pointer border p-2 px-4 rounded-md w-12 flex justify-center items-center"
+            className="fa-solid fa-image cursor-pointer border border-gray-700  p-2 px-4 rounded-md w-12 flex justify-center items-center bg-white "
             onClick={insertImage}
           ></button>
 
           {/* unorder list */}
           <button
             title="unorder list"
-            className="fa-solid fa-list cursor-pointer border p-2 px-4 rounded-md w-12 flex justify-center items-center"
+            className="fa-solid fa-list cursor-pointer border border-gray-700  p-2 px-4 rounded-md w-12 flex justify-center items-center bg-white "
             onClick={() => {
               format("insertUnorderedList");
             }}
@@ -138,7 +138,7 @@ export default function Editor({ setDescription }) {
           {/* order list */}
           <button
             title="order list"
-            className="fa-solid fa-list-ol cursor-pointer border p-2 px-4 rounded-md w-12 flex justify-center items-center"
+            className="fa-solid fa-list-ol cursor-pointer border border-gray-700  p-2 px-4 rounded-md w-12 flex justify-center items-center bg-white "
             onClick={() => {
               format("insertOrderedList");
             }}
@@ -147,7 +147,7 @@ export default function Editor({ setDescription }) {
           {/* justify left */}
           <button
             title="justifyLeft"
-            className="fa-solid fa-align-left cursor-pointer border p-2 px-4 rounded-md w-12 flex justify-center items-center"
+            className="fa-solid fa-align-left cursor-pointer border border-gray-700  p-2 px-4 rounded-md w-12 flex justify-center items-center bg-white "
             onClick={() => {
               format("justifyLeft");
             }}
@@ -156,7 +156,7 @@ export default function Editor({ setDescription }) {
           {/* justify center */}
           <button
             title="justifyCenter"
-            className="fa-solid fa-align-center cursor-pointer border p-2 px-4 rounded-md w-12 flex justify-center items-center"
+            className="fa-solid fa-align-center cursor-pointer border border-gray-700  p-2 px-4 rounded-md w-12 flex justify-center items-center bg-white "
             onClick={() => {
               format("justifyCenter");
             }}
@@ -165,7 +165,7 @@ export default function Editor({ setDescription }) {
           {/* justify right */}
           <button
             title="justifyRight"
-            className="fa-solid fa-align-right cursor-pointer border p-2 px-4 rounded-md w-12 flex justify-center items-center"
+            className="fa-solid fa-align-right cursor-pointer border border-gray-700  p-2 px-4 rounded-md w-12 flex justify-center items-center bg-white "
             onClick={() => {
               format("justifyRight");
             }}
@@ -174,7 +174,7 @@ export default function Editor({ setDescription }) {
           {/* justify all */}
           <button
             title="justifyFull"
-            className="fa-solid fa-align-justify cursor-pointer border p-2 px-4 rounded-md w-12 flex justify-center items-center"
+            className="fa-solid fa-align-justify cursor-pointer border border-gray-700  p-2 px-4 rounded-md w-12 flex justify-center items-center bg-white "
             onClick={() => {
               format("justifyFull");
             }}
@@ -183,7 +183,7 @@ export default function Editor({ setDescription }) {
           {/* undo button */}
           <button
             title="undo"
-            className="fa-solid fa-rotate-left cursor-pointer border p-2 px-4 rounded-md w-12 flex justify-center items-center"
+            className="fa-solid fa-rotate-left cursor-pointer border border-gray-700  p-2 px-4 rounded-md w-12 flex justify-center items-center bg-white "
             onClick={() => {
               format("undo");
             }}
@@ -192,7 +192,7 @@ export default function Editor({ setDescription }) {
           {/* redo button */}
           <button
             title="redo"
-            className="fa-solid fa-rotate-right cursor-pointer border p-2 px-4 rounded-md w-12 flex justify-center items-center"
+            className="fa-solid fa-rotate-right cursor-pointer border border-gray-700  p-2 px-4 rounded-md w-12 flex justify-center items-center bg-white "
             onClick={() => {
               format("redo");
             }}
@@ -201,7 +201,7 @@ export default function Editor({ setDescription }) {
           {/* subscript button */}
           <button
             title="subscript"
-            className="fa-solid fa-subscript cursor-pointer border p-2 px-4 rounded-md w-12 flex justify-center items-center"
+            className="fa-solid fa-subscript cursor-pointer border border-gray-700  p-2 px-4 rounded-md w-12 flex justify-center items-center bg-white "
             onClick={() => {
               format("subscript");
             }}
@@ -210,7 +210,7 @@ export default function Editor({ setDescription }) {
           {/* superscript button */}
           <button
             title="superscript"
-            className="fa-solid fa-superscript cursor-pointer border p-2 px-4 rounded-md w-12 flex justify-center items-center"
+            className="fa-solid fa-superscript cursor-pointer border border-gray-700  p-2 px-4 rounded-md w-12 flex justify-center items-center bg-white "
             onClick={() => {
               format("superscript");
             }}
@@ -219,7 +219,7 @@ export default function Editor({ setDescription }) {
           {/* <!-- font Color --> */}
           <button
             title="color"
-            className="fa-solid fa-droplet cursor-pointer border p-2 px-4 rounded-md w-12 flex justify-center items-center"
+            className="fa-solid fa-droplet cursor-pointer border border-gray-700  p-2 px-4 rounded-md w-12 flex justify-center items-center bg-white "
             onClick={chooseForeColor}
           ></button>
           <input type="color" id="foreColor" className="hidden" />
@@ -227,7 +227,7 @@ export default function Editor({ setDescription }) {
           {/* backColor color */}
           <button
             title="background"
-            className="fa-solid fa-fill cursor-pointer border p-2 px-4 rounded-md w-12 flex justify-center items-center"
+            className="fa-solid fa-fill cursor-pointer border border-gray-700  p-2 px-4 rounded-md w-12 flex justify-center items-center bg-white "
             onClick={chooseBackColor}
           ></button>
           <input type="color" id="backColor" className="hidden" />
@@ -235,7 +235,7 @@ export default function Editor({ setDescription }) {
           {/* remove all formate */}
           <button
             title="remove all formatting"
-            className="fa-solid fa-eraser cursor-pointer border p-2 px-4 rounded-md w-12 flex justify-center items-center"
+            className="fa-solid fa-eraser cursor-pointer border border-gray-700  p-2 px-4 rounded-md w-12 flex justify-center items-center bg-white "
             onClick={() => {
               format("removeFormat");
             }}
@@ -245,7 +245,7 @@ export default function Editor({ setDescription }) {
           <select
             title="font size"
             id="fontSize"
-            className="cursor-pointer border p-2 px-4 rounded-md w-26 flex justify-center items-center text-gray-200 bg-gray-800"
+            className="cursor-pointer border border-gray-700  p-2 px-4 rounded-md w-26 flex justify-center items-center "
             onChange={formatFontSize}
           >
             <option value="">Size</option>
@@ -262,7 +262,7 @@ export default function Editor({ setDescription }) {
           <select
             title="heading"
             id="heading"
-            className="cursor-pointer border p-2 px-4 rounded-md w-26 flex justify-center items-center text-gray-200 bg-gray-800"
+            className="cursor-pointer border border-gray-700  p-2 px-4 rounded-md w-26 flex justify-center items-center "
             onChange={formatHeading}
           >
             <option value="">Heading</option>
@@ -280,7 +280,7 @@ export default function Editor({ setDescription }) {
           <div
             ref={textEditorRef}
             id={styles["text-box"]}
-            className="text-box border border-cyan-100 rounded-md w-full h-full p-4 text-gray-300 mt-10 resize-y"
+            className="text-box border bg-white border-gray-700 0 rounded-md w-full h-full p-4  mt-10 resize-y"
             contentEditable={true}
             value={textEditor}
             onInput={handleInput}
@@ -289,7 +289,7 @@ export default function Editor({ setDescription }) {
         <textarea
           name="desc"
           id="desc"
-          className="w-full h-20 text-editor-output bg-transparent border border-gray-400 text-gray-300 resize "
+          className="mt-5 w-full h-20 text-editor-output p-3 bg-transparent border border-gray-600 resize "
           value={textEditor}
           readOnly
         ></textarea>

@@ -5,24 +5,11 @@ import { db } from "../src/pages/firebase";
 
 export default function CategorieInput({ setCategory }) {
   const [selectedCategory, setSelectedCategory] = useState();
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState();
 
   const handleClick = (e) => {
-    e.target.classList.toggle("bg-gray-400");
-    e.target.classList.toggle("text-black");
-
-    if (e.target.dataset.select === "selected") {
-      e.target.dataset.select = "";
-      let value = e.target.innerText;
-      let index = selectedCategory.indexOf(value);
-
-      selectedCategory.splice(index, 1);
-      setSelectedCategory([...selectedCategory]);
-    } else {
-      e.target.dataset.select = "selected";
-      let value = e.target.innerText;
-      setSelectedCategory([...selectedCategory, value]);
-    }
+    let value = e.target.innerText;
+    setSelectedCategory(value);
   };
 
   useEffect(() => {
@@ -45,7 +32,7 @@ export default function CategorieInput({ setCategory }) {
 
   return (
     <>
-      <div className="mt-10 md:mt-24 w-full md:w-9/12 bg-gray-800 rounded-md p-5 text-gray-300">
+      <div className="border shadow-md mt-10 md:mt-24 w-full md:w-9/12 bg-white rounded-md p-5 ">
         <h1 className={`${styles["category-heading"]} mb-5`}>
           Select Category
         </h1>
@@ -54,7 +41,7 @@ export default function CategorieInput({ setCategory }) {
             return (
               <li
                 key={category.id}
-                className="my-3 p-3 rounded-md bg-gray-700 hover:bg-gray-600 cursor-pointer transition delay-75 "
+                className="my-3 p-3 border rounded-md bg-gray-100 hover:bg-gray-200 cursor-pointer transition delay-75 "
                 onClick={handleClick}
                 id={category.id}
               >
@@ -67,7 +54,7 @@ export default function CategorieInput({ setCategory }) {
       <textarea
         name="category-output"
         id="category-output"
-        className="tags-output bg-transparent border border-gray-400 text-gray-300 resize"
+        className="mt-5 w-full md:w-9/12 tags-output bg-transparent border border-gray-400  resize"
         value={selectedCategory}
         readOnly
       ></textarea>

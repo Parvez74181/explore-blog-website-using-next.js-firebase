@@ -13,75 +13,86 @@ export default function Card({ postData }) {
   let months = date.getMonth();
   let year = date.getFullYear();
   if (day < 10) day = "0" + day;
-  if (months < 10) months = "0" + months;
-  let blogUploadDate = `${day}.${months}.${year}`;
+  if (months < 10) months = `0${months + 1}`;
+  let blogUploadDate = `${year}-${months}-${day}`;
+
+  let parsedDescription = parse(`${description}`);
 
   return (
     <>
       <div
-        className={`${styles["card"]}  rounded-lg shadow bg-gray-800 border-gray-700`}
-        style={{ width: "19rem", height: "29rem" }}
+        className={`${styles["card"]} w-[19rem] relative rounded-lg shadow-md bg-white`}
         data-aos="zoom-in-up"
         data-aos-duration="1000"
       >
         {/* thumbnail image */}
-        <Link href={`/blog/${slug}/${id}`}>
-          <Image
-            className="rounded-t-lg "
-            src={`https://drive.google.com/uc?export=view&id=${
-              thumbnail.split("/")[5]
-            }`}
-            alt={slug}
-            height={170}
-            width={170}
-            style={{ objectFit: "cover", height: "190px", width: "100%" }}
-            priority={true}
-          />
-        </Link>
+        <div className="w-full relaive px-3 pt-3 md:p-3">
+          <Link href={`/blog/${slug}/${id}`} className="w-1/3">
+            <Image
+              className="rounded-md h-[190px] md:h-full"
+              src={`https://drive.google.com/uc?export=view&id=${
+                thumbnail.split("/")[5]
+              }`}
+              alt={slug}
+              height={170}
+              width={170}
+              style={{ objectFit: "cover", width: "100%" }}
+              priority={true}
+            />
+          </Link>
+        </div>
 
         <div
-          className="p-5"
+          className="p-4 w-full "
           // style={{ height: "268px" }}
         >
+          {/* author and upload time */}
+          <div className=" mb-2 flex justify-between items-center ">
+            <span>{blogUploadDate}</span>
+
+            <Link
+              href={`/blog/category/${category}`}
+              className="hover:underline"
+            >
+              {category}
+            </Link>
+          </div>
+
           {/* title */}
           <Link href={`/blog/${slug}/${id}`}>
             <h5
-              className={`${styles["title"]} mb-2 text-2xl md:text-xl font-bold tracking-wide leading-7 text-gray-300`}
+              className={`${styles["title"]} font-bold text-xl md:text-2xl tracking-wider leading-7 `}
             >
               {title}
             </h5>
           </Link>
 
-          {/* author and upload time */}
-          <div className="flex justify-between items-center text-gray-400">
-            <span>{category}</span>
-            <span>{blogUploadDate}</span>
-          </div>
-
           {/* description */}
           <div
-            className={`${styles["desc"]} mb-3 font-normal text-md tracking-wider leading-7 text-gray-400`}
-            style={{ height: "125px" }}
+            className={`${styles["desc"]} mb-3 font-normal text-md tracking-wider leading-7 `}
+            style={{ height: "120px" }}
           >
-            {parse(`${description}`)}
+            {parsedDescription}
           </div>
           <Link
             href={`/blog/${slug}/${id}`}
-            className="inline-flex items-center p-3 px-5 text-sm text-center text-gray-200 bg-slate-700 rounded-lg focus:outline-none hover:bg-slate-900 tracking-wide transition delay-50"
+            className={`${styles["read-more-btn"]} inline-flex items-center text-sm tracking-wide text-center  rounded-md text-blue-500 transition-all delay-75 `}
           >
-            Read more
+            Read more &nbsp;
             <svg
-              aria-hidden="true"
-              className="w-4 h-4 ml-2 -mr-1"
-              fill="currentColor"
-              viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              width={14}
+              height={14}
             >
-              <path
-                fillRule="evenodd"
-                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              ></path>
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
             </svg>
           </Link>
         </div>

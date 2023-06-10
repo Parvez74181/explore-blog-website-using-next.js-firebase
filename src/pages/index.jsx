@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import Card from "../../components/Card";
 import styles from "../styles/Home.module.scss";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import swal from "sweetalert";
+
 import {
   collection,
   query,
@@ -60,9 +59,6 @@ export default function Home({ data, lastVisibleId }) {
   const [loading, setLoading] = useState(true);
   const [currentLastVisible, setCurrentLastVisible] = useState(null);
 
-  const router = useRouter();
-  const { icon, title, text } = router.query;
-
   useEffect(() => {
     setPostData(data);
     setLoading(false);
@@ -74,14 +70,6 @@ export default function Home({ data, lastVisibleId }) {
     };
 
     if (lastVisibleId !== null) getLastVisibleBlogById();
-
-    if (title && text && icon) {
-      swal({
-        title: title,
-        text: text,
-        icon: icon,
-      });
-    }
   }, [data]);
 
   // to load more blogs when user approach to the bottom of content
@@ -113,39 +101,49 @@ export default function Home({ data, lastVisibleId }) {
         <>
           {/* hero section */}
           <section
-            className={`${styles["hero-section"]} mx-5 mt-5 md:mt-20 flex justify-center items-center flex-col`}
-            style={{ height: "70vh" }}
+            className={`${styles["hero-section"]}  mb-5 flex justify-center items-center flex-col`}
+            style={{ height: "85vh" }}
           >
             <h1
-              className={`${styles["tracking-in-contract-bck-bottom"]} ${styles["hero-section-heading"]} text-center  text-4xl md:text-6xl md:leading-snug leading-snug`}
+              className={`${styles["tracking-in-contract-bck-bottom"]} ${styles["hero-section-heading"]} text-center  text-4xl md:text-6xl md:leading-snug leading-snug `}
             >
               Discover All Your Interests <br /> in One Place.
             </h1>
 
             <Link
               href="/explore"
-              className={`${styles["btn"]} ${styles["focus-in-expand-fwd"]} mt-5 rounded-md text-gray-100 text-xl bg-slate-600 flex justify-center items-center`}
+              className={`${styles["btn"]} ${styles["focus-in-expand-fwd"]} mt-5 rounded-md  text-xl flex justify-center items-center drop-shadow-xl`}
               style={{
-                boxShadow: `rgb(58 79 129) 20px 0px 60px, rgb(20, 28, 45) 0px 0px 60px`,
                 padding: "3px",
               }}
               onClick={() => setLoading(true)}
             >
-              <span className="tracking-widest relative px-5 py-2.5 transition-all ease-in duration-75 bg-gray-900 rounded-md group-hover:bg-opacity-0">
-                Explore&nbsp;{" "}
-                <i className="fa-solid fa-arrow-right fa-beat"></i>
+              <span className="tracking-widest relative px-5 py-2.5 transition-all ease-in duration-75   bg-gray-100  rounded-md group-hover:bg-opacity-0 flex justify-center items-center">
+                Explore&nbsp;
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  width={16}
+                  height={16}
+                >
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
               </span>
             </Link>
           </section>
 
           {/* recent post section */}
 
-          <section
-            className={`${styles["hero-section"]} mx-auto mb-10 `}
-            style={{ width: "80%" }}
-          >
+          <section className={` mx-auto mb-10 `} style={{ width: "80%" }}>
             <h1
-              className={`${styles["recent-post-title"]} ms-2 md:ms-20 text-gray-300 text-xl md:text-2xl `}
+              className={`${styles["recent-post-title"]} ms-2 md:ms-20 text-2xl md:text-3xl `}
             >
               Recent Posts
             </h1>
@@ -178,10 +176,10 @@ export default function Home({ data, lastVisibleId }) {
                 </div>
               }
               endMessage={
-                <div className="text-gray-200 text-center flex justify-center items-center mt-5">
+                <div className="text-blue-500 text-center flex justify-center items-center mt-5">
                   <svg
                     aria-hidden="true"
-                    className="w-5 h-5 mr-1.5 text-gray-200"
+                    className="w-5 h-5 mr-1.5  text-blue-500"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg"

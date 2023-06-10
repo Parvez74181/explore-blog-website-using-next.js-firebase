@@ -33,15 +33,15 @@ function TagInputBox({ setTags }) {
 
   return (
     <>
-      <div className="mt-10 md:mt-24  w-full md:w-9/12 bg-gray-800 rounded-md p-5 text-gray-300">
+      <div className="border shadow-md mt-10 md:mt-24  w-full md:w-9/12 bg-white  rounded-md p-5 ">
         <h1 className={`${styles["tag-heading"]} mb-7`}>Enter Post Tags</h1>
         {/* tag box */}
         <div className="tag-box w-full my-5 flex flex-wrap justify-start items-center gap-2  max-h-64 overflow-auto">
           {tags?.map((tag, i) => (
-            <span key={i} className="bg-gray-700 p-3 rounded-md">
+            <span key={i} className="bg-gray-100  p-3 rounded-md">
               {tag} &nbsp;
               <i
-                className="bg-gray-600 p-1 w-6 h-6 text-center rounded-full cursor-pointer hover:bg-gray-500 transition delay-75 fa-solid fa-xmark"
+                className="bg-gray-200  p-1 w-6 h-6 text-center rounded-full cursor-pointer hover:bg-gray-300 transition delay-75 fa-solid fa-xmark"
                 id={i}
                 onClick={removeTag}
               ></i>
@@ -54,7 +54,7 @@ function TagInputBox({ setTags }) {
           type="text"
           name="tag-input"
           id="tag-input"
-          className="my-3 w-full p-3 bg-gray-700 rounded-md"
+          className=" my-3 w-full p-3 bg-gray-100 border rounded-md"
           placeholder="Enter Tags"
           onKeyDown={addTag}
         />
@@ -63,7 +63,7 @@ function TagInputBox({ setTags }) {
       <textarea
         name="tags-output"
         id="tags-output"
-        className="tags-output bg-transparent border border-gray-400 text-gray-300 resize "
+        className="mt-5 w-full md:w-9/12 tags-output bg-transparent border border-gray-400  resize "
         value={tags}
         readOnly
       ></textarea>

@@ -2,32 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-/* width */
-::-webkit-scrollbar {
-  width: 5px;
-}
+@import url("https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;600;700&display=swap");
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #b8b8b8;
-  border-radius: 10px;
-}
 :root {
-  --primary-color: #111827;
+  --primary-color-dark: #111827;
+  --primary-color-light: #f3f4f6;
   --secondary-color: #1f69ef;
 }
 html {
   scroll-behavior: smooth !important;
+  font-family: "Gothic A1", sans-serif;
 }
 body {
   overflow-x: hidden !important;
-  background: var(--primary-color);
+  background-color: var(--primary-color-light);
 }
-.swal-modal,
+/* .swal-modal,
 .swal-icon,
 .swal-icon::before,
 .swal-icon::after,
@@ -75,4 +65,4 @@ body {
   border-radius: 0.5rem;
   width: 100%;
   padding: 0.8rem;
-}
+} */

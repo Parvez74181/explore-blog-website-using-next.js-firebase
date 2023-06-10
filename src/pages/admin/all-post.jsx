@@ -1,7 +1,3 @@
-import { useState, useEffect } from "react";
-import Card from "../../../../components/Card";
-import Lottie from "lottie-react";
-import animationData from "../../../../public/notFound.json";
 import {
   collection,
   query,
@@ -10,18 +6,18 @@ import {
   limit,
   getDocs,
   getDoc,
+  deleteDoc,
   doc,
-  where,
 } from "firebase/firestore";
-import { db } from "../../firebase";
-import { useRouter } from "next/router";
-import Loader from "../../../../components/Loader";
-import Link from "next/link";
+import { db } from "../../pages/firebase";
+import { useEffect, useState } from "react";
+import Loader from "../../../components/Loader";
 import InfiniteScroll from "react-infinite-scroll-component";
 import swal from "sweetalert";
+import { useRouter } from "next/router";
 
 // to get more blogs by InfiniteScroll component
-async function getBlogs(lastVisible = null, category = null) {
+async function getBlogs(lastVisible = null) {
   const blogCollection = collection(db, "blogs");
   const limitItem = 12; // how many item do i want to show
 
@@ -29,20 +25,14 @@ async function getBlogs(lastVisible = null, category = null) {
   const queryCursor = lastVisible
     ? query(
         blogCollection,
-        where("postData.category", "==", category),
         orderBy("timeStamp", "desc"),
         startAfter(lastVisible),
         limit(limitItem)
       )
-    : query(
-        blogCollection,
-        where("postData.category", "==", category),
-        orderBy("timeStamp", "desc"),
-        limit(limitItem)
-      );
+    : query(blogCollection, orderBy("timeStamp", "desc"), limit(limitItem));
+
   try {
     const documentSnapshots = await getDocs(queryCursor); // get the documents from the firebase
-
     // serialize the data and store them into list variable
     const list = documentSnapshots?.docs?.map((doc) => {
       const data = doc?.data();
@@ -70,26 +60,45 @@ async function getBlogs(lastVisible = null, category = null) {
   }
 }
 
-export default function getPostsByCategory({ data, lastVisibleId }) {
-  const router = useRouter();
-  const { category } = router.query;
+export default function allPosts({ data, lastVisibleId }) {
   const [postData, setPostData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentLastVisible, setCurrentLastVisible] = useState(null);
+  const [adminAccessToken, setAdminAccessToken] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      setPostData(data);
-      setLoading(false);
-    }, 200);
+    let accessToken = localStorage.getItem("accessToken"); // get the accessToken from localStorage
+
+    // handle accessToken checking
+    const checkAccessToken = async () => {
+      // make a request to backend for checking the token is verifyed or not
+      let res = await fetch("/api/checkAdminAccessToken", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ accessToken }),
+      });
+
+      if (res.ok) setAdminAccessToken(true);
+      // if accessToken is verifyed that means res is ok, make adminAccessToken is true so admin can see the admin panel
+      else if (!res.ok) router.push("/"); // if accessToken isn't verifyed then send the user to home page
+    };
+    checkAccessToken();
+  }, []);
+
+  useEffect(() => {
+    setPostData(data);
+    setLoading(false);
+
     // get the lastVisible blog from the getServerSideProps lastVisibleId and set them to currentLastVisible
     const getLastVisibleBlogById = async () => {
       let lastVisibleRef = await getDoc(doc(db, "blogs", lastVisibleId));
       setCurrentLastVisible(lastVisibleRef);
     };
     if (lastVisibleId !== null) getLastVisibleBlogById();
-  }, [category]);
+  }, [data]);
 
   // to load more blogs when user approach to the bottom of content
   const loadMoreBlogs = async () => {
@@ -97,8 +106,7 @@ export default function getPostsByCategory({ data, lastVisibleId }) {
     // cause if there is no more data then do not need to call the getBlogs function
     if (currentLastVisible !== null) {
       const { list, lastVisible: newLastVisible } = await getBlogs(
-        currentLastVisible,
-        category
+        currentLastVisible
       );
 
       // setPostData((prevData) => [...prevData, ...list]);
@@ -114,34 +122,43 @@ export default function getPostsByCategory({ data, lastVisibleId }) {
     }
   };
 
+  const editPost = () => {};
+  const deletePost = async (e) => {
+    let id = e?.target?.dataset?.id;
+    try {
+      await deleteDoc(doc(db, "blogs", id));
+      swal({
+        title: "Success",
+        text: "Post is successfully deleted!",
+        icon: "success",
+      });
+    } catch (error) {
+      swal({
+        title: "Error",
+        text: "Post is not deleted!",
+        icon: "error",
+      });
+    }
+  };
+
   return (
     <>
-      <section
-        className={`min-h-screen mx-auto mb-10 `}
-        style={{ width: "80%" }}
-      >
-        {loading && <Loader />}
-        {postData.length > 0 ? (
-          <>
-            <p
-              className={`mt-10 text-gray-500 text-md text-center `}
-              data-aos="zoom-in-up"
-              data-aos-duration="1000"
-            >
-              Showing results based on '{category}'
-            </p>
-
+      {adminAccessToken && (
+        <main className={`min-h-screen`}>
+          {loading ? (
+            <Loader />
+          ) : (
             <InfiniteScroll
               dataLength={postData.length}
               next={loadMoreBlogs}
               hasMore={currentLastVisible !== null}
               loader={
                 // this is the loading animtion to show that we have more data to read
-                <div className="flex items-center justify-center w-full mt-5">
+                <div className="flex items-center justify-center w-full">
                   <div role="status">
                     <svg
                       aria-hidden="true"
-                      className="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                      className="w-8 h-8 mr-2 text-gray-200 animate-spin  fill-blue-600"
                       viewBox="0 0 100 101"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -159,7 +176,7 @@ export default function getPostsByCategory({ data, lastVisibleId }) {
                 </div>
               }
               endMessage={
-                <div className="text-blue-500 text-center flex justify-center items-center mt-5">
+                <div className="text-blue-500 text-center flex justify-center items-center">
                   <svg
                     aria-hidden="true"
                     className="w-5 h-5 mr-1.5 text-blue-500"
@@ -178,59 +195,76 @@ export default function getPostsByCategory({ data, lastVisibleId }) {
               }
               style={{ overflow: "hidden" }}
             >
-              <div
-                className="flex justify-center items-center flex-wrap mt-10"
-                style={{ gap: "50px" }}
+              <section
+                className="content flex flex-wrap justify-center items-center my-10 mx-auto"
+                style={{ gap: "50px", width: "80%" }}
               >
-                {postData?.map((post) => {
-                  return <Card postData={post} key={post.id} />;
-                })}
-              </div>
+                <h1 className="text-center text-4xl my-5">Blogs</h1>
+                <table className="w-full text-sm text-center tracking-wider ">
+                  <thead className="text-xs  uppercase bg-slate-200 ">
+                    <tr>
+                      <th scope="col" className="px-6 py-3 text-left">
+                        Blog title
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Date
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Edit
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Delete
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {postData?.map((post) => {
+                      return (
+                        <>
+                          <tr key={post.id} className=" border-b bg-white ">
+                            <th
+                              scope="row"
+                              className="px-6 py-4 font-medium text-left whitespace-nowrap"
+                            >
+                              {post.data.postData.title}
+                            </th>
+                            <td className="px-6 py-4 text-[10px]">
+                              {post.data.timeStamp}
+                            </td>
+                            <td className="px-6 py-4 ">
+                              <i
+                                className="fa-solid fa-pen-to-square text-green-500 cursor-pointer"
+                                data-id={post.id}
+                                data-time={post.data.timeStamp}
+                                onClick={editPost}
+                              ></i>
+                            </td>
+                            <td className="px-6 py-4 ">
+                              <i
+                                title="delete"
+                                className="fa-solid fa-trash text-red-500 cursor-pointer"
+                                data-id={post.id}
+                                onClick={deletePost}
+                              ></i>
+                            </td>
+                          </tr>
+                        </>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </section>
             </InfiniteScroll>
-          </>
-        ) : (
-          <>
-            <div
-              className={`mt-10 md:mt-20 text-gray-500 text-md text-center `}
-              data-aos="zoom-in-up"
-              data-aos-duration="1000"
-            >
-              Nothing found about '{category}'
-              <Lottie
-                animationData={animationData}
-                style={{ height: "300px" }}
-              />
-              <Link
-                href={`/`}
-                className="inline-flex items-center p-3 px-5 text-sm text-center text-gray-200 bg-slate-700 rounded-lg focus:outline-none hover:bg-slate-800 tracking-wide transition delay-50"
-              >
-                Back to home
-                <svg
-                  aria-hidden="true"
-                  className="w-4 h-4 ml-2 -mr-1"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-              </Link>
-            </div>
-          </>
-        )}
-      </section>
+          )}
+        </main>
+      )}
     </>
   );
 }
 
-export async function getServerSideProps(context) {
-  const { category } = context.query;
-
-  const { list, lastVisible } = await getBlogs(null, category);
+export async function getServerSideProps() {
+  const { list, lastVisible } = await getBlogs();
   // Pass data to the page via props
   return {
     props: { data: list, lastVisibleId: lastVisible ? lastVisible.id : null },

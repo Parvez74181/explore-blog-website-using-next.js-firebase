@@ -104,20 +104,19 @@ export default function Content({ data, randomPosts }) {
   return (
     <>
       <Head></Head>
-      <main className={`${styles["slug-main"]} min-h-screen `}>
+      <main className={`${styles["slug-main"]} min-h-screen bg-white`}>
         {loading ? (
           <Loader />
         ) : (
           <section
-            className="flex justify-center items-start flex-wrap my-10 mt-16 mx-5 md:mx-20 "
+            className="flex justify-center items-start flex-wrap  py-10 pt-16 mx-5 md:mx-20 "
             style={{ gap: "100px" }}
           >
-            {/* left side main content or blog */}
+            {/* left side main content  */}
             <div
-              className="relative w-full md:w-7/12 flex flex-col"
+              className="relative w-full lg:w-7/12  flex flex-col"
               style={{
                 minHeight: "100vh",
-
                 gap: "50px",
               }}
             >
@@ -125,14 +124,14 @@ export default function Content({ data, randomPosts }) {
               <div className="relative" style={{ width: "100%" }}>
                 {/* category */}
                 <div
-                  className={`${styles["category"]} my-5 text-sm text-gray-50 tracking-widest`}
+                  className={`${styles["category"]} my-5 text-sm  tracking-widest`}
                 >
                   <Link href="#">{post?.data?.postData?.category}</Link>
                 </div>
 
                 {/* title */}
                 <h5
-                  className={`my-6 text-2xl md:text-3xl font-bold tracking-wider leading-8 text-gray-100`}
+                  className={`my-6 text-2xl md:text-3xl font-bold tracking-wider `}
                 >
                   {post?.data?.postData?.title}
                 </h5>
@@ -143,12 +142,11 @@ export default function Content({ data, randomPosts }) {
                   src={`https://drive.google.com/uc?export=view&id=${
                     post?.data?.postData?.thumbnail.split("/")[5]
                   }`}
-                  className="rounded-md"
+                  className="rounded-md shadow-md"
                   width={558}
                   height={372}
                   style={{
                     width: "100%",
-                    boxShadow: `rgba(37, 60, 114, 0.5) 0px 0px 60px, rgba(20, 28, 45,0.5)  0px 0px 60px`,
                   }}
                   alt={post?.data?.postData?.slug}
                   priority={false}
@@ -157,7 +155,7 @@ export default function Content({ data, randomPosts }) {
                 {/* description */}
 
                 <div
-                  className={`${styles["desc-full"]} my-6 font-normal text-xl tracking-wider leading-9 text-gray-400`}
+                  className={`${styles["desc-full"]} my-6 font-normal text-xl tracking-wider leading-9 text-gray-700 `}
                 >
                   {parse(`${post?.data?.postData?.description}`)}
                 </div>
@@ -173,7 +171,7 @@ export default function Content({ data, randomPosts }) {
                 {/* like box */}
 
                 <div
-                  className={`${styles["like-box"]} relative text-2xl  flex justify-start items-center`}
+                  className={`${styles["like-box"]} relative text-2xl flex justify-start items-center`}
                   style={{ width: "50%" }}
                 >
                   <i
@@ -192,7 +190,7 @@ export default function Content({ data, randomPosts }) {
                   {/* like count number */}
                   <span
                     id="like-count"
-                    className={`${styles["like-count"]}  text-gray-200 mx-9`}
+                    className={`${styles["like-count"]}   mx-9`}
                   >
                     100
                   </span>
@@ -248,7 +246,7 @@ export default function Content({ data, randomPosts }) {
                   {/* email */}
                   <i
                     title="share by email"
-                    className="fa-regular fa-envelope text-gray-400 cursor-pointer"
+                    className="fa-regular fa-envelope cursor-pointer"
                     onClick={() => {
                       createEmailShareLink(
                         post?.data?.postData?.title,
@@ -279,22 +277,22 @@ export default function Content({ data, randomPosts }) {
             {/* ////////////////////// */}
             {/* right side bar */}
             <div
-              className="sticky top-8 mt-20 w-full md:w-4/12 flex flex-col"
+              className="sticky top-8 mt-20 w-full lg:w-4/12 flex flex-col"
               style={{ minHeight: "100vh", gap: "50px" }}
             >
               {/* related content or post */}
               <div
-                className="relative flex flex-col gap-8 text-gray-100"
+                className="relative flex flex-col gap-8 "
                 style={{ width: "100%" }}
               >
                 {/* related content box */}
                 <h5
-                  className={`${styles["related-post-heading"]} text-md tracking-widest`}
+                  className={`${styles["related-post-heading"]} text-xl font-bold tracking-widest`}
                 >
                   Related Post
                 </h5>
                 {randomPost?.map((post) => {
-                  let date = new Date(post.data.timeStamp);
+                  let date = new Date(post?.data?.timeStamp);
                   let year = date.getFullYear();
                   const months = [
                     "January",
@@ -315,8 +313,8 @@ export default function Content({ data, randomPosts }) {
                   let day = date.getDay();
                   return (
                     <Link
-                      href={`/blog/${post.data.postData.slug}/${post.id}`}
-                      className="flex flex-col items-center border rounded-lg shadow md:flex-row md:max-w-xl border-none"
+                      href={`/blog/${post?.data?.postData?.slug}/${post?.id}`}
+                      className="flex flex-col border rounded-lg md:flex-row md:max-w-xl border-none"
                       onClick={() => setLoading(true)}
                     >
                       <Image
@@ -324,23 +322,18 @@ export default function Content({ data, randomPosts }) {
                           post.data.postData.thumbnail.split("/")[5]
                         }`}
                         alt={"slug"}
-                        className="object-cover rounded w-full md:h-24 md:w-32"
+                        className="object-cover rounded w-full md:h-24 md:w-40"
                         width={372}
                         height={372}
-                        style={{
-                          boxShadow: `rgba(37, 60, 114,0.5) 0px 0px 60px, rgba(20, 28, 45,0.5) 0px 0px 60px`,
-                        }}
                       ></Image>
 
                       <div className="flex flex-col justify-between md:pl-4 my-3 md:my-0 leading-normal">
                         <h5
-                          className={`${styles["related-post-title"]} mb-2 text-xl font-bold tracking-wider text-gray-300`}
+                          className={`${styles["related-post-title"]} mb-2 text-xl font-bold tracking-wider `}
                         >
                           {post.data.postData.title}
                         </h5>
-                        <span
-                          className={`${styles["upload-date"]} text-gray-400`}
-                        >
+                        <span className={`${styles["upload-date"]} `}>
                           {`${month} ${day}, ${year}`}
                         </span>
                       </div>
@@ -350,9 +343,9 @@ export default function Content({ data, randomPosts }) {
               </div>
 
               {/* categories */}
-              <div className="relative text-gray-100" style={{ width: "100%" }}>
+              <div className="relative " style={{ width: "100%" }}>
                 <h5
-                  className={`${styles["categories-heading"]} text-md tracking-widest`}
+                  className={`${styles["categories-heading"]} text-xl font-bold tracking-widest`}
                 >
                   Categories
                 </h5>
@@ -362,11 +355,11 @@ export default function Content({ data, randomPosts }) {
                       <li
                         id={category.id}
                         key={category.id}
-                        className="text-gray-400 hover:text-gray-200 cursor-pointer transition-all delay-50"
+                        className=" hover:text-gray-600 cursor-pointer transition-all delay-50"
                       >
                         <Link
                           href={`/blog/category/${category.name}`}
-                          className="hover:text-gray-100 tracking-wide"
+                          className="hover:text-gray-600 tracking-wide"
                         >
                           {category.name}
                         </Link>
