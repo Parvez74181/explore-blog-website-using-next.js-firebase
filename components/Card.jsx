@@ -21,7 +21,7 @@ export default function Card({ postData }) {
   return (
     <>
       <div
-        className={`${styles["card"]} w-[19rem] relative rounded-lg shadow-md bg-white`}
+        className={`${styles["card"]} w-[19rem] relative rounded-lg shadow-lg bg-white`}
         data-aos="zoom-in-up"
         data-aos-duration="1000"
       >

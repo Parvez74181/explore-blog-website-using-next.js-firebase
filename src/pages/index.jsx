@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import Card from "../../components/Card";
 import styles from "../styles/Home.module.scss";
+import { useRouter } from "next/router";
 import Link from "next/link";
+import Lottie from "lottie-react";
+import animationData from "../../public/index-bg.json";
 
 import {
   collection,
@@ -13,9 +16,10 @@ import {
   getDoc,
   doc,
 } from "firebase/firestore";
-import { db } from "../pages/firebase";
+import { db } from "../../utils/firebaseConfig";
 import Loader from "../../components/Loader";
 import InfiniteScroll from "react-infinite-scroll-component";
+import Button from "../../components/Button";
 
 // to get more blogs by InfiniteScroll component
 async function getBlogs(lastVisible = null) {
@@ -37,6 +41,7 @@ async function getBlogs(lastVisible = null) {
   // serialize the data and store them into list variable
   const list = documentSnapshots?.docs?.map((doc) => {
     const data = doc?.data();
+
     const formattedData = {
       ...data,
       timeStamp: data?.timeStamp?.toDate().toISOString(),
@@ -58,6 +63,8 @@ export default function Home({ data, lastVisibleId }) {
   const [postData, setPostData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentLastVisible, setCurrentLastVisible] = useState(null);
+
+  const router = useRouter();
 
   useEffect(() => {
     setPostData(data);
@@ -92,6 +99,18 @@ export default function Home({ data, lastVisibleId }) {
       }
     }
   };
+  const searchHandler = (e) => {
+    if (e.keyCode === 13 || e.key === "Enter") {
+      let searchText = e.target.value.trim().toLowerCase();
+      if (searchText) router.push(`/blog/search/${searchText}`);
+    } else if (e.type === "click") {
+      let parentNodeItem = e.target.parentNode.parentNode;
+      let searchInput = parentNodeItem.querySelector("#search");
+
+      searchInput = searchInput?.value?.trim().toLowerCase();
+      if (searchInput) router.push(`/blog/search/${searchInput}`);
+    }
+  };
 
   return (
     <main className={`min-h-screen`}>
@@ -102,41 +121,60 @@ export default function Home({ data, lastVisibleId }) {
           {/* hero section */}
           <section
             className={`${styles["hero-section"]}  mb-5 flex justify-center items-center flex-col`}
-            style={{ height: "85vh" }}
           >
             <h1
-              className={`${styles["tracking-in-contract-bck-bottom"]} ${styles["hero-section-heading"]} text-center  text-4xl md:text-6xl md:leading-snug leading-snug `}
+              className={`${styles["tracking-in-contract-bck-bottom"]} ${styles["hero-section-heading"]} text-black text-5xl md:text-6xl lg:text-8xl md:leading-snug leading-snug uppercase mt-5 text-center`}
             >
-              Discover All Your Interests <br /> in One Place.
+              Discover All Your Interests in One Place.
             </h1>
-
-            <Link
-              href="/explore"
-              className={`${styles["btn"]} ${styles["focus-in-expand-fwd"]} mt-5 rounded-md  text-xl flex justify-center items-center drop-shadow-xl`}
-              style={{
-                padding: "3px",
-              }}
-              onClick={() => setLoading(true)}
-            >
-              <span className="tracking-widest relative px-5 py-2.5 transition-all ease-in duration-75   bg-gray-100  rounded-md group-hover:bg-opacity-0 flex justify-center items-center">
-                Explore&nbsp;
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  width={16}
-                  height={16}
-                >
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                  <polyline points="15 3 21 3 21 9"></polyline>
-                  <line x1="10" y1="14" x2="21" y2="3"></line>
-                </svg>
-              </span>
-            </Link>
+            <p className="m-5 text-center md:text-xl leading-relaxed md:w-1/2">
+              Explore a treasure trove of captivating blogs curated for diverse
+              interests: travel, tech, wellness, creativity, and more.
+            </p>
+            <div className="container mx-auto flex px-5 py-5 md:flex-row flex-col items-center">
+              <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0">
+                <Lottie animationData={animationData} />
+              </div>
+              <div className="lg:flex-grow md:w-1/2 lg:pl-24 md:pl-16 flex flex-col md:items-start md:text-left items-center text-center">
+                <div className="flex w-full md:justify-start justify-center items-end">
+                  <div className="relative w-full lg:w-full xl:w-1/2 flex justify-center items-center">
+                    <input
+                      type="search"
+                      id="search"
+                      name="search"
+                      placeholder="Top 10 books..."
+                      className="w-full bg-opacity-50 border-2 border-gray-300 focus:ring-2 focus:ring-gray-300 focus:bg-transparent  text-base outline-none text-gray-700 py-2 leading-8 transition-colors duration-200 ease-in-out rounded-full px-5 pr-12"
+                      onKeyDown={searchHandler}
+                    />
+                    {/* search icon */}
+                    <button
+                      onClick={searchHandler}
+                      className="absolute right-3"
+                    >
+                      <svg
+                        className="w-8 h-8  text-gray-500 ml-2 cursor-pointer hover:text-gray-700 "
+                        aria-hidden="true"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                          clipRule="evenodd"
+                        ></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <p className="text-sm mt-5 text-gray-500 mb-8 w-full">
+                  Embark on a journey of knowledge and exploration.
+                </p>
+                <Link href="/explore">
+                  <Button text={"Explore Blogs"} />
+                </Link>
+              </div>
+            </div>
           </section>
 
           {/* recent post section */}
@@ -214,6 +252,7 @@ export default function Home({ data, lastVisibleId }) {
 export async function getServerSideProps() {
   const { list, lastVisible } = await getBlogs();
   // Pass data to the page via props
+
   return {
     props: { data: list, lastVisibleId: lastVisible ? lastVisible.id : null },
   };

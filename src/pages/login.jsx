@@ -52,6 +52,7 @@ export default function Registration() {
     } catch (error) {
       // if anything goes wrong then make the login button text to Login and show an error
       e.target.innerHTML = "Login";
+      console.log(error);
       swal({ title: "Error", text: "Wrong credential!", icon: "warning" });
     }
   };

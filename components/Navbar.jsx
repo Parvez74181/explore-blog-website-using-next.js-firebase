@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import styles from "../src/styles/Navbar.module.scss";
 import { collection, onSnapshot } from "firebase/firestore";
-import { db } from "../src/pages/firebase";
+import { db } from "../utils/firebaseConfig";
 import { useRouter } from "next/router";
 
 const Navbar = ({ progress }) => {
@@ -38,20 +38,26 @@ const Navbar = ({ progress }) => {
   };
 
   useEffect(() => {
-    onSnapshot(collection(db, "categories"), (querySnapshot) => {
-      let list = [];
-      querySnapshot?.forEach((doc) => {
-        let data = doc.data();
-        list.push({ id: doc.id, name: data?.name });
-      });
-      setCategories(list);
-    });
+    onSnapshot(
+      collection(db, "categories"),
+      (querySnapshot) => {
+        let list = [];
+        querySnapshot?.forEach((doc) => {
+          let data = doc.data();
+          list.push({ id: doc.id, name: data?.name });
+        });
+        setCategories(list);
+      },
+      (error) => {
+        console.log("Error fetching categories:", error);
+      }
+    );
   }, []);
 
   const searchHandler = (e) => {
-    if (e.key === "Enter") {
-      let searchText = e.target.value;
-      router.push(`/blog/search/${searchText}`);
+    if (e.keyCode === 13 || e.key === "Enter") {
+      let searchText = e.target.value.trim().toLowerCase();
+      if (searchText) router.push(`/blog/search/${searchText}`);
     }
   };
   return (
@@ -61,12 +67,9 @@ const Navbar = ({ progress }) => {
       >
         <div className="mx-auto md:mx-10  md:px-5 p-4  flex flex-wrap items-center justify-between">
           <Link href="/" className="flex items-center">
-            <Image
+            <img
               src="/logo.png"
-              className="h-[50px] w-[100px] mr-3"
-              width={150}
-              height={100}
-              priority={true}
+              className="w-[150px] mr-3"
               alt="explore blog logo"
             />
           </Link>
@@ -196,7 +199,7 @@ const Navbar = ({ progress }) => {
               <li>
                 <Link
                   href="/"
-                  className="block py-2 pl-3 pr-4  rounded md:p-0 md:hover:text-blue-500 hover:bg-gray-200  md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
+                  className="block py-2 pl-3 pr-4  rounded md:p-0 hover:text-blue-400 hover:bg-gray-200  md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
                   aria-current="page"
                   onClick={() => {
                     closeNavbar();
@@ -208,15 +211,19 @@ const Navbar = ({ progress }) => {
               </li>
               {/* Explore */}
               <li>
-                <a
-                  id="explore-dropdown"
-                  className="block py-2 pl-3 pr-4 cursor-pointer rounded md:p-0 md:hover:text-blue-500  hover:bg-gray-200 md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
-                  onClick={dropdown}
-                  // onBlur={dropdown}
-                >
-                  Explore
-                  <i className="ms-2 fa-solid fa-angle-down"></i>
-                </a>
+                <span>
+                  <a
+                    href="/explore"
+                    id="explore-dropdown"
+                    className="inline-block py-2 pl-3 pr-4 cursor-pointer rounded md:p-0 hover:text-blue-400  hover:bg-gray-200 md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
+                  >
+                    Explore
+                  </a>
+                  <i
+                    className="ms-2 fa-solid fa-angle-down cursor-pointer"
+                    onClick={dropdown}
+                  ></i>
+                </span>
 
                 {/* dropdown */}
                 <div
@@ -245,8 +252,8 @@ const Navbar = ({ progress }) => {
               {/* about */}
               <li>
                 <Link
-                  href="#"
-                  className="block py-2 pl-3 pr-4  rounded md:p-0 md:hover:text-blue-500  hover:bg-gray-200  md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
+                  href="/about"
+                  className="block py-2 pl-3 pr-4  rounded md:p-0 hover:text-blue-400  hover:bg-gray-200  md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
                   onClick={() => {
                     closeNavbar();
                     progress(100);
@@ -259,7 +266,7 @@ const Navbar = ({ progress }) => {
               <li>
                 <Link
                   href="#"
-                  className="block py-2 pl-3 pr-4  rounded md:p-0 md:hover:text-blue-500 hover:bg-gray-200 md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
+                  className="block py-2 pl-3 pr-4  rounded md:p-0 hover:text-blue-400 hover:bg-gray-200 md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
                   onClick={() => {
                     closeNavbar();
                     progress(100);
@@ -272,7 +279,7 @@ const Navbar = ({ progress }) => {
               <li>
                 <Link
                   href="/admin/admin-dashboard"
-                  className="block py-2 pl-3 pr-4  rounded md:p-0 md:hover:text-blue-500 hover:bg-gray-200 md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
+                  className="block py-2 pl-3 pr-4  rounded md:p-0 hover:text-blue-400 hover:bg-gray-200 md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
                   onClick={() => {
                     closeNavbar();
                     progress(100);

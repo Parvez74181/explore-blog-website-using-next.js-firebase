@@ -9,7 +9,7 @@ import {
   deleteDoc,
   doc,
 } from "firebase/firestore";
-import { db } from "../../pages/firebase";
+import { db } from "../../../utils/firebaseConfig";
 import { useEffect, useState } from "react";
 import Loader from "../../../components/Loader";
 import InfiniteScroll from "react-infinite-scroll-component";

@@ -5,9 +5,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;600;700&display=swap");
 
 :root {
-  --primary-color-dark: #111827;
-  --primary-color-light: #f3f4f6;
-  --secondary-color: #1f69ef;
+  --primary-color: #fff;
+  --secondary-color: #11cbff;
 }
 html {
   scroll-behavior: smooth !important;
@@ -15,8 +14,9 @@ html {
 }
 body {
   overflow-x: hidden !important;
-  background-color: var(--primary-color-light);
+  background-color: var(--primary-color);
 }
+
 /* .swal-modal,
 .swal-icon,
 .swal-icon::before,

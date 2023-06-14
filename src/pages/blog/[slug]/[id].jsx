@@ -9,7 +9,7 @@ import {
   onSnapshot,
   getDocs,
 } from "firebase/firestore";
-import { db } from "../../../pages/firebase";
+import { db } from "../../../../utils/firebaseConfig";
 import { useEffect, useState } from "react";
 import parse from "html-react-parser";
 import Loader from "../../../../components/Loader";
@@ -23,6 +23,7 @@ export default function Content({ data, randomPosts }) {
     setPost(data[0]);
     setRandomPost(randomPosts);
     setLoading(false);
+    console.log(post);
 
     onSnapshot(collection(db, "categories"), (querySnapshot) => {
       let list = [];
@@ -152,124 +153,96 @@ export default function Content({ data, randomPosts }) {
                   priority={false}
                 ></Image>
 
+                {/* like - share options */}
+                <div
+                  className="relative flex justify-between pt-5"
+                  style={{ width: "100%" }}
+                >
+                  {/*  share boxs */}
+
+                  {/* share box */}
+
+                  <div
+                    className={`${styles["share-box"]} text-2xl flex justify-between items-center`}
+                    style={{ width: "50%" }}
+                  >
+                    <i
+                      title="share by facebook"
+                      className="fa-brands fa-facebook-f cursor-pointer"
+                      style={{ color: "#3b5998" }}
+                      onClick={() => {
+                        createFacebookShareLink(
+                          location.origin,
+                          post?.data?.postData?.title,
+                          parse(`${post?.data?.postData?.description}`),
+                          `https://drive.google.com/uc?export=view&id=${
+                            post?.data?.postData?.thumbnail.split("/")[5]
+                          }`
+                        );
+                      }}
+                    ></i>
+                    <i
+                      title="share by instagram"
+                      className="fa-brands fa-instagram cursor-pointer"
+                      style={{ color: "#fa7e1e " }}
+                      onClick={() => {
+                        createInstagramShareLink(
+                          `https://drive.google.com/uc?export=view&id=${
+                            post?.data?.postData?.thumbnail.split("/")[5]
+                          }`,
+                          post?.data?.postData?.title
+                        );
+                      }}
+                    ></i>
+                    <i
+                      title="share by twitter"
+                      className="fa-brands fa-twitter cursor-pointer"
+                      style={{ color: "#00acee" }}
+                      onClick={() => {
+                        createTwitterShareLink(
+                          location.origin,
+                          post?.data?.postData?.title,
+                          post?.data?.postData?.tag
+                        );
+                      }}
+                    ></i>
+
+                    {/* email */}
+                    <i
+                      title="share by email"
+                      className="fa-regular fa-envelope cursor-pointer"
+                      onClick={() => {
+                        createEmailShareLink(
+                          post?.data?.postData?.title,
+                          location.href
+                        );
+                      }}
+                    ></i>
+
+                    {/* pinterest */}
+                    <i
+                      title="share by pinterest"
+                      className="fa-brands fa-pinterest-p cursor-pointer"
+                      style={{ color: "#E60023" }}
+                      onClick={() => {
+                        createPinterestShareLink(
+                          location.origin,
+                          `https://drive.google.com/uc?export=view&id=${
+                            post?.data?.postData?.thumbnail.split("/")[5]
+                          }`,
+                          post?.data?.postData?.description
+                        );
+                      }}
+                    ></i>
+                  </div>
+                </div>
+
                 {/* description */}
 
                 <div
                   className={`${styles["desc-full"]} my-6 font-normal text-xl tracking-wider leading-9 text-gray-700 `}
                 >
                   {parse(`${post?.data?.postData?.description}`)}
-                </div>
-              </div>
-
-              {/* like - share options */}
-              <div
-                className="relative flex justify-between"
-                style={{ width: "100%" }}
-              >
-                {/* like - share boxs */}
-
-                {/* like box */}
-
-                <div
-                  className={`${styles["like-box"]} relative text-2xl flex justify-start items-center`}
-                  style={{ width: "50%" }}
-                >
-                  <i
-                    className="fa-regular fa-heart absolute cursor-pointer"
-                    style={{ color: "red" }}
-                    onClick={addLike}
-                    title="like"
-                  ></i>
-                  <i
-                    className="fa-solid fa-heart absolute cursor-pointer hidden"
-                    style={{ color: "red" }}
-                    onClick={removeLike}
-                    title="dislike"
-                  ></i>
-
-                  {/* like count number */}
-                  <span
-                    id="like-count"
-                    className={`${styles["like-count"]}   mx-9`}
-                  >
-                    100
-                  </span>
-                </div>
-
-                {/* share box */}
-
-                <div
-                  className={`${styles["share-box"]} text-2xl flex justify-between items-center`}
-                  style={{ width: "50%" }}
-                >
-                  <i
-                    title="share by facebook"
-                    className="fa-brands fa-facebook-f cursor-pointer"
-                    style={{ color: "#3b5998" }}
-                    onClick={() => {
-                      createFacebookShareLink(
-                        location.origin,
-                        post?.data?.postData?.title,
-                        parse(`${post?.data?.postData?.description}`),
-                        `https://drive.google.com/uc?export=view&id=${
-                          post?.data?.postData?.thumbnail.split("/")[5]
-                        }`
-                      );
-                    }}
-                  ></i>
-                  <i
-                    title="share by instagram"
-                    className="fa-brands fa-instagram cursor-pointer"
-                    style={{ color: "#fa7e1e " }}
-                    onClick={() => {
-                      createInstagramShareLink(
-                        `https://drive.google.com/uc?export=view&id=${
-                          post?.data?.postData?.thumbnail.split("/")[5]
-                        }`,
-                        post?.data?.postData?.title
-                      );
-                    }}
-                  ></i>
-                  <i
-                    title="share by twitter"
-                    className="fa-brands fa-twitter cursor-pointer"
-                    style={{ color: "#00acee" }}
-                    onClick={() => {
-                      createTwitterShareLink(
-                        location.origin,
-                        post?.data?.postData?.title,
-                        post?.data?.postData?.tag
-                      );
-                    }}
-                  ></i>
-
-                  {/* email */}
-                  <i
-                    title="share by email"
-                    className="fa-regular fa-envelope cursor-pointer"
-                    onClick={() => {
-                      createEmailShareLink(
-                        post?.data?.postData?.title,
-                        location.href
-                      );
-                    }}
-                  ></i>
-
-                  {/* pinterest */}
-                  <i
-                    title="share by pinterest"
-                    className="fa-brands fa-pinterest-p cursor-pointer"
-                    style={{ color: "#E60023" }}
-                    onClick={() => {
-                      createPinterestShareLink(
-                        location.origin,
-                        `https://drive.google.com/uc?export=view&id=${
-                          post?.data?.postData?.thumbnail.split("/")[5]
-                        }`,
-                        post?.data?.postData?.description
-                      );
-                    }}
-                  ></i>
                 </div>
               </div>
             </div>

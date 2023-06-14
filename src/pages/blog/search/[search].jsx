@@ -14,11 +14,12 @@ import {
   where,
   or,
 } from "firebase/firestore";
-import { db } from "../../firebase";
+import { db } from "../../../../utils/firebaseConfig";
 import { useRouter } from "next/router";
 import Loader from "../../../../components/Loader";
 import Link from "next/link";
 import InfiniteScroll from "react-infinite-scroll-component";
+import styles from "../../../styles/Search.module.scss";
 
 // to get more blogs by InfiniteScroll component
 async function getBlogs(lastVisible = null, search = null) {
@@ -32,7 +33,8 @@ async function getBlogs(lastVisible = null, search = null) {
         blogCollection,
         or(
           where("postData.tag", "array-contains", search),
-          where("postData.category", "==", search)
+          where("postData.category", "==", search),
+          where("postData.title", "==", search)
         ),
         orderBy("timeStamp", "desc"),
         startAfter(lastVisible),
@@ -42,8 +44,8 @@ async function getBlogs(lastVisible = null, search = null) {
         blogCollection,
         or(
           where("postData.tag", "array-contains", search),
-
-          where("postData.category", "==", search)
+          where("postData.category", "==", search),
+          where("postData.title", "==", search)
         ),
         orderBy("timeStamp", "desc"),
         limit(limitItem)
@@ -160,10 +162,10 @@ export default function getPostsBySearch({ data, lastVisibleId }) {
                 </div>
               }
               endMessage={
-                <div className="text-gray-200 text-center flex justify-center items-center mt-5">
+                <div className="text-blue-500 text-center flex justify-center items-center mt-5">
                   <svg
                     aria-hidden="true"
-                    className="w-5 h-5 mr-1.5 text-gray-200"
+                    className="w-5 h-5 mr-1.5 text-blue-500 "
                     fill="currentColor"
                     viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg"
@@ -202,23 +204,16 @@ export default function getPostsBySearch({ data, lastVisibleId }) {
                 style={{ height: "300px" }}
               />
               <Link
-                href={`/`}
-                className="inline-flex items-center p-3 px-5 text-sm text-center text-gray-200 bg-slate-700 rounded-lg focus:outline-none hover:bg-slate-800 tracking-wide transition delay-50"
+                href={"/"}
+                id={styles["btn"]}
+                className={`rounded-md relative mx-auto inline-flex justify-center items-center drop-shadow-xl`}
+                style={{
+                  padding: "3px",
+                }}
               >
-                Back to home
-                <svg
-                  aria-hidden="true"
-                  className="w-4 h-4 ml-2 -mr-1"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
+                <span className="text-black tracking-widest relative px-4 py-3 transition-all ease-in duration-75 bg-gray-100 hover:text-white rounded-md">
+                  <i className="fa-solid fa-arrow-left"></i> Back to home
+                </span>
               </Link>
             </div>
           </>
@@ -232,8 +227,8 @@ export async function getServerSideProps(context) {
   const { search } = context.query;
 
   const { list, lastVisible } = await getBlogs(null, search);
+
   // Pass data to the page via props
-  console.log(list);
   return {
     props: { data: list, lastVisibleId: lastVisible ? lastVisible.id : null },
   };

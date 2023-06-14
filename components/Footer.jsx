@@ -1,105 +1,51 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const Footer = () => {
   return (
     <>
-      <footer className="bg-white w-full">
+      <footer className="bg-gray-800 text-gray-200 w-full ">
         <div className="mx-auto w-full">
           {/* upper part */}
-          <div className="grid grid-cols-2 gap-8 px-10 py-6 lg:py-8 md:grid-cols-4 justify-items-center">
-            <div className="mb-6 md:mb-0">
-              <a href="/" className="flex items-center">
-                <img src="/logo.svg" className="h-8 mr-3" alt="FlowBite Logo" />
-                {/* <span className="self-center text-2xl font-semibold whitespace-nowrap ">
-                  Explore Blog
-                </span> */}
-              </a>
-            </div>
-
-            {/* company portion */}
-            <div className="">
-              <h2 className="mb-6 text-sm font-semibold  uppercase ">
-                Company
-              </h2>
-              <ul className=" font-medium">
-                <li className="mb-4">
-                  <a href="#" className=" hover:underline">
-                    About
-                  </a>
-                </li>
-                <li className="mb-4">
-                  <a href="#" className="hover:underline">
-                    Careers
-                  </a>
-                </li>
-                <li className="mb-4">
-                  <a href="#" className="hover:underline">
-                    Brand Center
-                  </a>
-                </li>
-                <li className="mb-4">
-                  <a href="#" className="hover:underline">
-                    Blog
-                  </a>
-                </li>
-              </ul>
-            </div>
-            {/* helo portion */}
-            <div className="">
-              <h2 className="mb-6 text-sm font-semibold  uppercase ">
-                Help center
-              </h2>
-              <ul className=" font-medium">
-                <li className="mb-4">
-                  <a href="#" className="hover:underline">
-                    Discord Server
-                  </a>
-                </li>
-                <li className="mb-4">
-                  <a href="#" className="hover:underline">
-                    Twitter
-                  </a>
-                </li>
-                <li className="mb-4">
-                  <a href="#" className="hover:underline">
-                    Facebook
-                  </a>
-                </li>
-                <li className="mb-4">
-                  <a href="#" className="hover:underline">
-                    Contact Us
-                  </a>
-                </li>
-              </ul>
-            </div>
-            {/* legal portion  */}
-            <div className="ms-7 md:ms-0">
-              <h2 className="mb-6 text-sm font-semibold uppercase ">Legal</h2>
-              <ul className=" font-medium">
-                <li className="mb-4">
-                  <a href="#" className="hover:underline">
-                    Privacy Policy
-                  </a>
-                </li>
-                <li className="mb-4">
-                  <a href="#" className="hover:underline">
-                    Licensing
-                  </a>
-                </li>
-                <li className="mb-4">
-                  <a href="#" className="hover:underline">
-                    Terms &amp; Conditions
-                  </a>
-                </li>
-              </ul>
-            </div>
+          <div class="flex items-center justify-center flex-col md:justify-between md:flex-row p-5 md:w-3/4 md:mx-auto">
+            <Link href="/" class="flex items-center mb-4 sm:mb-0">
+              <img
+                src="/footer-logo.png"
+                className=" w-[150px] mr-3"
+                alt="=Logo"
+              />
+            </Link>
+            <ul class="flex flex-wrap items-center mb-6 font-medium  sm:mb-0">
+              <li>
+                <Link href="/" class="mr-4 hover:underline md:mr-6 ">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link href="/about" class="mr-4 hover:underline md:mr-6 ">
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link href="/explore" class="mr-4 hover:underline md:mr-6 ">
+                  Explore
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/privary-policy"
+                  class="mr-4 hover:underline md:mr-6"
+                >
+                  Privacy Policy
+                </Link>
+              </li>
+            </ul>
           </div>
 
           {/* bottom part */}
-          <div className="px-10 md:px-32 py-6 bg-gray-100 md:flex md:items-center md:justify-between ">
+          <div className="px-10 md:px-32 py-6 bg-gray-700 md:flex md:items-center md:justify-between ">
             <span className="text-sm sm:text-center flex justify-center md:justify-normal">
-              © 2023 <a href="https://flowbite.com/">Flowbite™</a>. All Rights
-              Reserved.
+              © 2023 <Link href="/"> Explore Blog™</Link>. All Rights Reserved.
             </span>
             {/* social media icons */}
             <div className="mt-4 space-x-6 flex justify-center md:justify-normal md:mt-0">

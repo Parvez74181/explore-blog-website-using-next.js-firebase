@@ -1,7 +1,7 @@
 import styles from "../src/styles/Create-Post.module.scss";
 import { useState, useEffect } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
-import { db } from "../src/pages/firebase";
+import { db } from "../utils/firebaseConfig";
 
 export default function CategorieInput({ setCategory }) {
   const [selectedCategory, setSelectedCategory] = useState();

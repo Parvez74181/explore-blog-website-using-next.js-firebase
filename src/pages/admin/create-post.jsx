@@ -3,7 +3,7 @@ import Editor from "../../../components/Editor";
 import TagInputBox from "../../../components/TagInputBox";
 import styles from "../../styles/Create-Post.module.scss";
 import { useState, useEffect } from "react";
-import { db } from "../firebase";
+import { db } from "../../../utils/firebaseConfig";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import swal from "sweetalert";
 import { useRouter } from "next/router";

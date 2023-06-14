@@ -1,18 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=Castoro+Titling&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif&display=swap");
 
 .hero-section {
-  font-family: "Quicksand", sans-serif;
-  background-image: url("/hero-section-img.png");
   position: relative;
+  background-image: url("/index-page-bg-shadow.svg");
+  background-repeat: no-repeat;
 
   .hero-section-heading {
-    // background: linear-gradient(45deg, #ff00cc, #4242ac);
-    // background-clip: text;
-    // color: transparent;
-
-    color: white;
-    font-family: "Castoro Titling", cursive !important;
-    font-weight: 900 !important;
+    font-family: "Instrument Serif", serif;
   }
   .btn {
     transition: 0.3s ease-in-out;
@@ -30,7 +24,6 @@
 .recent-post-title {
   position: relative;
   font-stretch: ultra-condensed;
-  font-family: "dinpro", sans-serif;
   &::before,
   &::after {
     content: "";
@@ -39,7 +32,7 @@
     left: 0;
     width: 5px;
     height: 5px;
-    background: linear-gradient(45deg, #ff00cc, #4242ac);
+    background-color: var(--secondary-color);
     border-radius: 50%;
   }
   &::after {

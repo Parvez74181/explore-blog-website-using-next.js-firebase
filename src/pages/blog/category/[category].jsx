@@ -13,7 +13,7 @@ import {
   doc,
   where,
 } from "firebase/firestore";
-import { db } from "../../firebase";
+import { db } from "../../../../utils/firebaseConfig";
 import { useRouter } from "next/router";
 import Loader from "../../../../components/Loader";
 import Link from "next/link";

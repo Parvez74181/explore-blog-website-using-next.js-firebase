@@ -1,0 +1,11 @@
+#btn {
+  transition: 0.3s ease-in-out;
+  background: linear-gradient(-45deg, #ff00cc, #8d39f8) !important;
+  span {
+    transition: 0.2s;
+    &:hover {
+      color: white;
+      background: linear-gradient(-45deg, #ff00cc, #8d39f8);
+    }
+  }
+}
