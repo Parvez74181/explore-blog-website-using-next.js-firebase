@@ -6,12 +6,10 @@ function TagInputBox({ setTags }) {
 
   // for adding tags into the tag box
   const addTag = (e) => {
-    if (e.key === "Enter") e.preventDefault(); // if keyDown is 'enter' then don't do anything and don't submit the form
-
-    if (e.key === " ") {
+    if (e.key === "Enter") {
       let value = e.target.value;
 
-      if (value === " ") return;
+      if (value.length <= 0) return; // if input value is null then do not add to tags
 
       setLocalTags([...tags, value.trim()]);
       e.target.value = "";
@@ -19,6 +17,7 @@ function TagInputBox({ setTags }) {
   };
 
   useEffect(() => {
+    console.log(tags);
     setTags((prevData) => ({
       ...prevData,
       tag: tags,
@@ -31,10 +30,19 @@ function TagInputBox({ setTags }) {
     setLocalTags([...tags]);
   };
 
+  // addTagfromTextArea handler
+  const addTagfromTextArea = (e) => {
+    let values = e.target.value.split(","); // split them based by comma and make an array
+    let trimmedValues = values.map((value) => value.trim()); // get trimmedValues
+    setLocalTags([...tags, ...trimmedValues]);
+  };
+
   return (
     <>
       <div className="border shadow-md mt-10 md:mt-24  w-full md:w-9/12 bg-white  rounded-md p-5 ">
-        <h1 className={`${styles["tag-heading"]} mb-7`}>Enter Post Tags</h1>
+        <h1 className={`${styles["tag-heading"]} text-xl mb-7`}>
+          Enter Post Tags
+        </h1>
         {/* tag box */}
         <div className="tag-box w-full my-5 flex flex-wrap justify-start items-center gap-2  max-h-64 overflow-auto">
           {tags?.map((tag, i) => (
@@ -63,9 +71,10 @@ function TagInputBox({ setTags }) {
       <textarea
         name="tags-output"
         id="tags-output"
-        className="mt-5 w-full md:w-9/12 tags-output bg-transparent border border-gray-400  resize "
+        className="mt-5 w-full md:w-9/12 text-black tags-output bg-transparent border border-gray-400  resize "
         value={tags}
-        readOnly
+        onKeyDown={addTag}
+        onChange={addTagfromTextArea}
       ></textarea>
     </>
   );

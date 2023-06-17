@@ -66,3 +66,37 @@ body {
   width: 100%;
   padding: 0.8rem;
 } */
+h1 {
+  font-size: clamp(2.113rem, 1.9252rem + 0.9390000000000001vw, 3.052rem);
+}
+h2 {
+  font-size: clamp(
+    1.699rem,
+    1.5506000000000002rem + 0.7419999999999998vw,
+    2.441rem
+  );
+}
+h3 {
+  font-size: clamp(1.35rem, 1.2294rem + 0.603vw, 1.953rem);
+}
+h4 {
+  font-size: clamp(
+    1.253rem,
+    1.1909999999999998rem + 0.31000000000000005vw,
+    1.563rem
+  );
+}
+h5 {
+  font-size: clamp(
+    1.063rem,
+    1.0255999999999998rem + 0.18700000000000006vw,
+    1.25rem
+  );
+}
+h6 {
+  font-size: clamp(
+    1.063rem,
+    1.0255999999999998rem + 0.18700000000000006vw,
+    1.25rem
+  );
+}

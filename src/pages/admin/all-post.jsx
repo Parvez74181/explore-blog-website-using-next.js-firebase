@@ -15,6 +15,7 @@ import Loader from "../../../components/Loader";
 import InfiniteScroll from "react-infinite-scroll-component";
 import swal from "sweetalert";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 // to get more blogs by InfiniteScroll component
 async function getBlogs(lastVisible = null) {
@@ -91,7 +92,7 @@ export default function allPosts({ data, lastVisibleId }) {
   useEffect(() => {
     setPostData(data);
     setLoading(false);
-
+    console.log(data);
     // get the lastVisible blog from the getServerSideProps lastVisibleId and set them to currentLastVisible
     const getLastVisibleBlogById = async () => {
       let lastVisibleRef = await getDoc(doc(db, "blogs", lastVisibleId));
@@ -122,7 +123,13 @@ export default function allPosts({ data, lastVisibleId }) {
     }
   };
 
-  const editPost = () => {};
+  const editPost = () => {
+    swal({
+      icon: "info",
+      title: "Info",
+      text: "Update from firebase directly!",
+    });
+  };
   const deletePost = async (e) => {
     let id = e?.target?.dataset?.id;
     try {
@@ -176,7 +183,7 @@ export default function allPosts({ data, lastVisibleId }) {
                 </div>
               }
               endMessage={
-                <div className="text-blue-500 text-center flex justify-center items-center">
+                <div className="text-blue-500 text-center flex justify-center items-center my-5">
                   <svg
                     aria-hidden="true"
                     className="w-5 h-5 mr-1.5 text-blue-500"
@@ -223,12 +230,13 @@ export default function allPosts({ data, lastVisibleId }) {
                       return (
                         <>
                           <tr key={post.id} className=" border-b bg-white ">
-                            <th
-                              scope="row"
-                              className="px-6 py-4 font-medium text-left whitespace-nowrap"
-                            >
-                              {post.data.postData.title}
-                            </th>
+                            <td className="px-6 py-4 font-medium text-left whitespace-nowrap">
+                              <Link
+                                href={`/blog/${post.data.postData.slug}/${post.id}`}
+                              >
+                                {post.data.postData.title}
+                              </Link>
+                            </td>
                             <td className="px-6 py-4 text-[10px]">
                               {post.data.timeStamp}
                             </td>

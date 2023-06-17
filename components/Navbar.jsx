@@ -6,9 +6,9 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../utils/firebaseConfig";
 import { useRouter } from "next/router";
 
-const Navbar = ({ progress }) => {
+const Navbar = () => {
   const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   // to show dropdown menu
@@ -203,7 +203,6 @@ const Navbar = ({ progress }) => {
                   aria-current="page"
                   onClick={() => {
                     closeNavbar();
-                    progress(100);
                   }}
                 >
                   Home
@@ -212,13 +211,13 @@ const Navbar = ({ progress }) => {
               {/* Explore */}
               <li>
                 <span>
-                  <a
+                  <Link
                     href="/explore"
                     id="explore-dropdown"
                     className="inline-block py-2 pl-3 pr-4 cursor-pointer rounded md:p-0 hover:text-blue-400  hover:bg-gray-200 md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
                   >
                     Explore
-                  </a>
+                  </Link>
                   <i
                     className="ms-2 fa-solid fa-angle-down cursor-pointer"
                     onClick={dropdown}
@@ -229,7 +228,7 @@ const Navbar = ({ progress }) => {
                 <div
                   className={`hidden absolute bg-white border shadow-md mt-2 mx-0 px-4 p-2 w-2/4 md:w-fit  rounded-md dropdown`}
                 >
-                  <ul>
+                  <ul style={{ maxHeight: "300px", overflowY: "auto" }}>
                     {categories?.map((category) => {
                       return (
                         <li id={category.id} key={category.id}>
@@ -238,7 +237,6 @@ const Navbar = ({ progress }) => {
                             className="hover:bg-gray-200 rounded block py-2 pl-3 pr-4 tracking-wide"
                             onClick={() => {
                               closeNavbar();
-                              progress(100);
                             }}
                           >
                             {category.name}
@@ -256,7 +254,6 @@ const Navbar = ({ progress }) => {
                   className="block py-2 pl-3 pr-4  rounded md:p-0 hover:text-blue-400  hover:bg-gray-200  md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
                   onClick={() => {
                     closeNavbar();
-                    progress(100);
                   }}
                 >
                   About
@@ -265,11 +262,10 @@ const Navbar = ({ progress }) => {
               {/* contact us */}
               <li>
                 <Link
-                  href="#"
+                  href="/contact"
                   className="block py-2 pl-3 pr-4  rounded md:p-0 hover:text-blue-400 hover:bg-gray-200 md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
                   onClick={() => {
                     closeNavbar();
-                    progress(100);
                   }}
                 >
                   Contact Us
@@ -282,7 +278,6 @@ const Navbar = ({ progress }) => {
                   className="block py-2 pl-3 pr-4  rounded md:p-0 hover:text-blue-400 hover:bg-gray-200 md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
                   onClick={() => {
                     closeNavbar();
-                    progress(100);
                   }}
                 >
                   Admin

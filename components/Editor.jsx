@@ -78,6 +78,41 @@ export default function Editor({ setDescription }) {
     });
   }, [format]);
 
+  // table of content
+  const tableOfContent = () => {
+    const textEditor = document.querySelector(".text-box");
+    // Get all heading elements
+    const headings = textEditor.querySelectorAll("h1, h2, h3, h4, h5, h6");
+
+    const headingList = document.createElement("ul"); // Create a ul html tag
+    headingList.id = "table-of-content";
+
+    // Iterate over each heading
+    headings.forEach((heading, i) => {
+      // Generate a unique ID for the heading if it doesn't have one
+      if (!heading.id) heading.id = "heading" + (i + 1);
+
+      // Create a list item with a link to the heading
+      const listItem = document.createElement("li");
+      const link = document.createElement("a");
+      link.href = "#" + heading.id;
+      link.textContent = heading.textContent;
+
+      // Append the link to the list item
+      listItem.appendChild(link);
+
+      // Append the list item to the headingList
+      headingList.appendChild(listItem);
+    });
+
+    // Insert the headingList at the beginning of the text editor
+    if (textEditor.firstChild) {
+      textEditor.insertBefore(headingList, textEditor.firstChild);
+    } else {
+      textEditor.appendChild(headingList);
+    }
+  };
+
   const handleInput = (e) => {
     setTextEditor(e.target.innerHTML);
   };
@@ -178,6 +213,13 @@ export default function Editor({ setDescription }) {
             onClick={() => {
               format("justifyFull");
             }}
+          ></button>
+
+          {/* table of content */}
+          <button
+            title="table of content"
+            className="fa-solid fa-table-list cursor-pointer border border-gray-700  p-2 px-4 rounded-md w-12 flex justify-center items-center bg-white "
+            onClick={tableOfContent}
           ></button>
 
           {/* undo button */}

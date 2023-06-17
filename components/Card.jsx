@@ -4,10 +4,10 @@ import Image from "next/image";
 import parse from "html-react-parser";
 
 export default function Card({ postData }) {
-  const { thumbnail, title, description, slug, category } =
-    postData?.data?.postData;
+  const { thumbnail, title, slug, category } = postData?.data?.postData;
   const { timeStamp } = postData?.data;
   const { id } = postData;
+
   const date = new Date(timeStamp);
   let day = date.getDate();
   let months = date.getMonth();
@@ -15,8 +15,6 @@ export default function Card({ postData }) {
   if (day < 10) day = "0" + day;
   if (months < 10) months = `0${months + 1}`;
   let blogUploadDate = `${year}-${months}-${day}`;
-
-  let parsedDescription = parse(`${description}`);
 
   return (
     <>
@@ -29,14 +27,14 @@ export default function Card({ postData }) {
         <div className="w-full relaive px-3 pt-3 md:p-3">
           <Link href={`/blog/${slug}/${id}`} className="w-1/3">
             <Image
-              className="rounded-md h-[190px] md:h-full"
+              className="rounded-md "
               src={`https://drive.google.com/uc?export=view&id=${
                 thumbnail.split("/")[5]
               }`}
               alt={slug}
               height={170}
               width={170}
-              style={{ objectFit: "cover", width: "100%" }}
+              style={{ objectFit: "cover", width: "100%", height: "170px" }}
               priority={true}
             />
           </Link>
@@ -70,9 +68,10 @@ export default function Card({ postData }) {
           {/* description */}
           <div
             className={`${styles["desc"]} mb-3 font-normal text-md tracking-wider leading-7 `}
-            style={{ height: "120px" }}
+            style={{ height: "115px" }}
           >
-            {parsedDescription}
+            {postData?.data?.postData?.["meta-description"] ||
+              postData?.data?.postData?.["metaDescription"]}
           </div>
           <Link
             href={`/blog/${slug}/${id}`}

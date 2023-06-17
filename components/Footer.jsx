@@ -7,34 +7,34 @@ const Footer = () => {
       <footer className="bg-gray-800 text-gray-200 w-full ">
         <div className="mx-auto w-full">
           {/* upper part */}
-          <div class="flex items-center justify-center flex-col md:justify-between md:flex-row p-5 md:w-3/4 md:mx-auto">
-            <Link href="/" class="flex items-center mb-4 sm:mb-0">
+          <div className="flex items-center justify-center flex-col md:justify-between md:flex-row p-5 md:w-3/4 md:mx-auto">
+            <Link href="/" className="flex items-center mb-4 sm:mb-0">
               <img
                 src="/footer-logo.png"
                 className=" w-[150px] mr-3"
                 alt="=Logo"
               />
             </Link>
-            <ul class="flex flex-wrap items-center mb-6 font-medium  sm:mb-0">
+            <ul className="flex flex-wrap items-center mb-6 font-medium  sm:mb-0">
               <li>
-                <Link href="/" class="mr-4 hover:underline md:mr-6 ">
+                <Link href="/" className="mr-4 hover:underline md:mr-6 ">
                   Home
                 </Link>
               </li>
               <li>
-                <Link href="/about" class="mr-4 hover:underline md:mr-6 ">
+                <Link href="/about" className="mr-4 hover:underline md:mr-6 ">
                   About
                 </Link>
               </li>
               <li>
-                <Link href="/explore" class="mr-4 hover:underline md:mr-6 ">
+                <Link href="/explore" className="mr-4 hover:underline md:mr-6 ">
                   Explore
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/privary-policy"
-                  class="mr-4 hover:underline md:mr-6"
+                  href="/privacy-policy"
+                  className="mr-4 hover:underline md:mr-6"
                 >
                   Privacy Policy
                 </Link>

@@ -1,0 +1,60 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif&display=swap");
+
+.submit-btn {
+  font-family: inherit;
+  padding: 0.7em 1em;
+  padding-left: 0.9em;
+  display: flex;
+  align-items: center;
+  border: none;
+  border: 1px solid #02b2bb;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+.submit-btn:hover {
+  background: #02b2bb;
+  color: white;
+}
+.submit-btn span {
+  display: block;
+  margin-left: 0.3em;
+  transition: all 0.3s ease-in-out;
+}
+
+.submit-btn svg {
+  display: block;
+  transform-origin: center center;
+  transition: transform 0.3s ease-in-out;
+}
+
+.submit-btn:hover .svg-wrapper {
+  animation: fly-1 0.6s ease-in-out infinite alternate;
+}
+
+.submit-btn:hover svg {
+  transform: translateX(1.2em) rotate(45deg) scale(1.1);
+}
+
+.submit-btn:hover span {
+  transform: translateX(20em);
+}
+
+.submit-btn:active {
+  transform: scale(0.95);
+}
+
+@keyframes fly-1 {
+  from {
+    transform: translateY(0.1em);
+  }
+
+  to {
+    transform: translateY(-0.1em);
+  }
+}
+
+.contact-header {
+  font-family: "Instrument Serif", serif;
+  text-transform: uppercase;
+}

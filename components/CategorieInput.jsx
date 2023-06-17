@@ -33,7 +33,7 @@ export default function CategorieInput({ setCategory }) {
   return (
     <>
       <div className="border shadow-md mt-10 md:mt-24 w-full md:w-9/12 bg-white rounded-md p-5 ">
-        <h1 className={`${styles["category-heading"]} mb-5`}>
+        <h1 className={`${styles["category-heading"]} text-xl mb-5`}>
           Select Category
         </h1>
         <ul className="category-list max-h-80 overflow-auto">

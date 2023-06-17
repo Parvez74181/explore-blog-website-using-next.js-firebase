@@ -60,7 +60,7 @@ export default function Registration() {
   return (
     <>
       <form
-        className={`${styles["user-login-form"]} rounded-xl px-5 mx-auto my-20  w-11/12 md:w-2/5 xl:w-2/6 bg-white`}
+        className={`${styles["user-login-form"]} rounded-xl px-5 shadow-lg mx-auto my-20  w-11/12 md:w-2/5 xl:w-2/6 bg-white`}
         onSubmit={(e) => {
           e.preventDefault();
         }}
