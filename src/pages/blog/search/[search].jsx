@@ -120,7 +120,7 @@ export default function getPostsBySearch({ data, lastVisibleId }) {
       <Head>
         <meta
           name="description"
-          content="Welcome to Explore Blog, a place where I share my passion for a variety of topics, including food, cooking, reviews, DIY projects, and more. Through this blog, I aim to provide you with valuable insights, inspiration, and practical tips to enhance your everyday life."
+          content="Welcome to 10m Blogs, a place where I share my passion for a variety of topics, including food, cooking, reviews, DIY projects, and more. Through this blog, I aim to provide you with valuable insights, inspiration, and practical tips to enhance your everyday life."
         />
         <meta
           name="keywords"
@@ -128,7 +128,7 @@ export default function getPostsBySearch({ data, lastVisibleId }) {
         />
 
         <title>
-          Explore Blog | {search} | Discover a World of Diverse Insights
+          10m Blogs | {search} | Discover a World of Diverse Insights
         </title>
       </Head>
 

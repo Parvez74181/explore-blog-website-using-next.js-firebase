@@ -12,15 +12,15 @@ import {
 import { db } from "../../../../utils/firebaseConfig";
 import { useEffect, useState } from "react";
 import parse from "html-react-parser";
+import { useRouter } from "next/router";
 
-export default function Content({ data, randomPosts }) {
+export default function Content({ data }) {
   const [post, setPost] = useState([]);
-  const [randomPost, setRandomPost] = useState([]);
   const [categories, setCategories] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
     setPost(data[0]);
-    setRandomPost(randomPosts);
 
     onSnapshot(collection(db, "categories"), (querySnapshot) => {
       let list = [];
@@ -30,8 +30,21 @@ export default function Content({ data, randomPosts }) {
       });
       setCategories(list);
     });
-    document.title = `Explore Blog | ${post?.data?.postData?.title}`;
-  }, [data, post, randomPosts]);
+  }, [data, post]);
+
+  // search handler
+  const searchHandler = (e) => {
+    if (e.keyCode === 13 || e.key === "Enter") {
+      let searchText = e.target.value.trim().toLowerCase();
+      if (searchText) router.push(`/blog/search/${searchText}`);
+    } else if (e.type === "click") {
+      let parentNodeItem = e.target.parentNode.parentNode;
+      let searchInput = parentNodeItem.querySelector("#search");
+
+      searchInput = searchInput?.value?.trim().toLowerCase();
+      if (searchInput) router.push(`/blog/search/${searchInput}`);
+    }
+  };
 
   // Share link for Facebook
   function createFacebookShareLink(url, title, description, imageUrl) {
@@ -104,18 +117,19 @@ export default function Content({ data, randomPosts }) {
         />
 
         <title>
-          Explore Blog | {post?.data?.postData?.title} | Discover a World of
+          10m Blogs | {post?.data?.postData?.title} | Discover a World of
           Diverse Insights
         </title>
       </Head>
+
       <main className={`${styles["slug-main"]} min-h-screen bg-white`}>
         <section
-          className="flex justify-center items-start flex-wrap  py-10 pt-16 mx-5 md:mx-20 "
-          style={{ gap: "100px" }}
+          className="flex justify-center items-start flex-wrap  py-5  mx-5 md:mx-20 "
+          style={{ gap: "150px" }}
         >
           {/* left side main content  */}
           <div
-            className="relative w-full lg:w-7/12  flex flex-col"
+            className="relative w-full lg:w-6/12  flex flex-col"
             style={{
               minHeight: "100vh",
               gap: "50px",
@@ -139,9 +153,9 @@ export default function Content({ data, randomPosts }) {
                 src={`https://drive.google.com/uc?export=view&id=${
                   post?.data?.postData?.thumbnail.split("/")[5]
                 }`}
-                className="rounded-md shadow-md md:h-96"
+                className="rounded-md shadow-md md:max-h-[500px]"
                 width={558}
-                height={350}
+                height={400}
                 style={{
                   width: "100%",
                 }}
@@ -160,6 +174,7 @@ export default function Content({ data, randomPosts }) {
                   className={`${styles["share-box"]} text-2xl flex justify-between items-center`}
                   style={{ width: "50%" }}
                 >
+                  {/* facebook */}
                   <i
                     title="share by facebook"
                     className="fa-brands fa-facebook-f cursor-pointer"
@@ -175,6 +190,8 @@ export default function Content({ data, randomPosts }) {
                       );
                     }}
                   ></i>
+
+                  {/* instagram */}
                   <i
                     title="share by instagram"
                     className="fa-brands fa-instagram cursor-pointer"
@@ -188,6 +205,8 @@ export default function Content({ data, randomPosts }) {
                       );
                     }}
                   ></i>
+
+                  {/* twitter */}
                   <i
                     title="share by twitter"
                     className="fa-brands fa-twitter cursor-pointer"
@@ -244,68 +263,42 @@ export default function Content({ data, randomPosts }) {
           {/* ////////////////////// */}
           {/* right side bar */}
           <div
-            className="sticky top-8 mt-20 w-full lg:w-4/12 flex flex-col"
+            className="sticky top-8 mt-20 w-full lg:w-3/12 flex flex-col"
             style={{ minHeight: "100vh", gap: "50px" }}
           >
-            {/* related content or post */}
-            <div
-              className="relative flex flex-col gap-8 "
-              style={{ width: "100%" }}
-            >
-              {/* related content box */}
-              <h5
-                className={`${styles["related-post-heading"]} text-xl font-bold tracking-widest`}
-              >
-                Related Post
-              </h5>
-              {randomPost?.map((post) => {
-                let date = new Date(post?.data?.timeStamp);
-                let year = date.getFullYear();
-                const months = [
-                  "January",
-                  "February",
-                  "March",
-                  "April",
-                  "May",
-                  "June",
-                  "July",
-                  "August",
-                  "September",
-                  "October",
-                  "November",
-                  "December",
-                ];
-                let month = months[date.getMonth()];
-
-                let day = date.getDay();
-                return (
-                  <Link
-                    href={`/blog/${post?.data?.postData?.slug}/${post?.id}`}
-                    className="flex flex-col border rounded-lg md:flex-row md:max-w-xl border-none"
-                  >
-                    <Image
-                      src={`https://drive.google.com/uc?export=view&id=${
-                        post.data.postData.thumbnail.split("/")[5]
-                      }`}
-                      className="object-cover rounded w-full md:h-24 md:w-40"
-                      width={372}
-                      height={372}
-                      alt={post?.data?.postData?.title}
-                    ></Image>
-
-                    <div className="flex flex-col justify-between md:pl-4 my-3 md:my-0 leading-normal">
-                      <h5
-                        className={`${styles["related-post-title"]} mb-2 text-xl font-bold tracking-wider `}
-                      >
-                        {post.data.postData.title}
-                      </h5>
-                      <span className={`${styles["upload-date"]} `}>
-                        {`${month} ${day}, ${year}`}
-                      </span>
-                    </div>
-                  </Link>
-                );
-              })}
+            {/* search input */}
+            <div className="relative  my-5 text-center">
+              <div className="flex w-full md:justify-start flex-col justify-center items-end">
+                <p className="text-left w-full my-3 pl-2 text-[18px]">
+                  Explore more relevant content!
+                </p>
+                <div className="relative mx-auto w-full flex justify-center items-center">
+                  <input
+                    type="search"
+                    id="search"
+                    name="search"
+                    placeholder="Top 10 books..."
+                    className="w-full bg-opacity-50 border-2 bg-transparent border-gray-500 focus:shadow-xl focus:bg-transparent text-base outline-none placeholder-gray-500 text-black py-2 leading-8 transition-colors duration-200 ease-in-out rounded-full px-5 pr-12"
+                    onKeyDown={searchHandler}
+                  />
+                  {/* search icon */}
+                  <button onClick={searchHandler} className="absolute right-3">
+                    <svg
+                      className="w-8 h-8  text-gray-500 ml-2 cursor-pointer hover:text-gray-700 "
+                      aria-hidden="true"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                        clipRule="evenodd"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
             </div>
 
             {/* categories */}
@@ -361,28 +354,6 @@ export async function getServerSideProps(context) {
   // add data to the list variable
   blog.unshift({ id: docSnap.id, data: formattedData });
 
-  // ************ RANDOM BLOGS SELECTION ************  //
-  let allBlogs = await getDocs(collection(db, "blogs"));
-  allBlogs.forEach((doc) => {
-    const formattedData = {
-      ...doc.data(),
-      timeStamp: doc.data().timeStamp.toDate().toISOString(),
-    };
-    blogsList.unshift({ id: doc.id, data: formattedData });
-  });
-
-  // Select a random blog post
-  while (randomIndices.length < count) {
-    const randomIndex = Math.floor(Math.random() * blogsList.length);
-    if (!randomIndices.includes(randomIndex)) {
-      randomIndices.push(randomIndex);
-    }
-  }
-
-  randomIndices.forEach((index) => {
-    selectedPosts.push(blogsList[index]);
-  });
-
   // Pass data to the page via props
-  return { props: { data: blog, randomPosts: selectedPosts } };
+  return { props: { data: blog } };
 }

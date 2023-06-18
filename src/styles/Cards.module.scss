@@ -126,6 +126,9 @@
 }
 .desc-full {
   font-family: "Inter", sans-serif;
+  p {
+    line-height: 32px !important;
+  }
   a {
     color: var(--secondary-color);
     cursor: pointer;

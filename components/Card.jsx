@@ -46,13 +46,15 @@ export default function Card({ postData }) {
         >
           {/* author and upload time */}
           <div className=" mb-2 flex justify-between items-center ">
-            <span>{blogUploadDate}</span>
+            <span>
+              <i className="fa-regular fa-clock"></i> {blogUploadDate}
+            </span>
 
             <Link
               href={`/blog/category/${category}`}
               className="hover:underline"
             >
-              {category}
+              <i className="font-bold text-sm">#</i> {category}
             </Link>
           </div>
 

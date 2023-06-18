@@ -69,7 +69,7 @@ const Navbar = () => {
           <Link href="/" className="flex items-center">
             <img
               src="/logo.png"
-              className="w-[150px] mr-3"
+              className="w-[100px] mr-3"
               alt="explore blog logo"
             />
           </Link>
@@ -120,7 +120,7 @@ const Navbar = () => {
                 <span className="sr-only">Search icon</span>
               </div>
               <input
-                type="text"
+                type="search"
                 id={styles["search-navbar"]}
                 className="block w-full p-2 pl-10 text-sm  border rounded-lg focus:ring-blue-500 focus:border-blue-500 font-normal border-gray-700 placeholder-gray-600 tracking-wider"
                 onKeyUp={searchHandler}
@@ -186,7 +186,7 @@ const Navbar = () => {
 
               {/* this search input for only mobile and tab devices */}
               <input
-                type="text"
+                type="search"
                 // id={styles["search-navbar"]}
                 className="block w-full p-2 pl-10 text-sm  border rounded-lg border-gray-700 placeholder-gray-600 font-normal focus:border-gray-900 outline-none"
                 placeholder="Search..."
@@ -215,6 +215,9 @@ const Navbar = () => {
                     href="/explore"
                     id="explore-dropdown"
                     className="inline-block py-2 pl-3 pr-4 cursor-pointer rounded md:p-0 hover:text-blue-400  hover:bg-gray-200 md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
+                    onClick={() => {
+                      closeNavbar();
+                    }}
                   >
                     Explore
                   </Link>
@@ -269,18 +272,6 @@ const Navbar = () => {
                   }}
                 >
                   Contact Us
-                </Link>
-              </li>{" "}
-              {/* admin */}
-              <li>
-                <Link
-                  href="/admin/admin-dashboard"
-                  className="block py-2 pl-3 pr-4  rounded md:p-0 hover:text-blue-400 hover:bg-gray-200 md:hover:bg-transparent border-gray-700 transition ease-in-out delay-50"
-                  onClick={() => {
-                    closeNavbar();
-                  }}
-                >
-                  Admin
                 </Link>
               </li>
             </ul>

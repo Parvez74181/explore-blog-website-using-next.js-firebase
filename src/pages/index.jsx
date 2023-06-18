@@ -99,6 +99,7 @@ export default function Home({ data, lastVisibleId }) {
       }
     }
   };
+
   const searchHandler = (e) => {
     if (e.keyCode === 13 || e.key === "Enter") {
       let searchText = e.target.value.trim().toLowerCase();
@@ -117,14 +118,14 @@ export default function Home({ data, lastVisibleId }) {
       <Head>
         <meta
           name="description"
-          content="Welcome to Explore Blog, a place where I share my passion for a variety of topics, including food, cooking, reviews, DIY projects, and more. Through this blog, I aim to provide you with valuable insights, inspiration, and practical tips to enhance your everyday life."
+          content="Welcome to 10m Blogs, a place where I share my passion for a variety of topics, including food, cooking, reviews, DIY projects, and more. Through this blog, I aim to provide you with valuable insights, inspiration, and practical tips to enhance your everyday life."
         />
         <meta
           name="keywords"
           content="Recipes, cuisines, gastronomy, culinary experiences, Techniques, tricks, culinary prowess, kitchen skills, Honest, unbiased, recommendations, informed decisions, Destinations, travel guides, personal experiences, tips, Personal development, wellness, productivity, self-care, Home Decor, Ideas, inspiration, DIY projects, cozy living spaces, Crafts and DIY, Creativity, DIY projects, crafts, artistic endeavors, Book and Movie Reviews, Thoughts, recommendations, genres, themes, Fashion and Beauty, Fashion trends, beauty tips, product reviews, Health and Fitness, Advice, workout routines, nutrition tips, wellness, Technology, Advancements, gadget reviews, tech news, insights, Inspiration and Motivation, Uplifting stories, motivational quotes, personal growth, Parenting and Family, Gardening and Plants, Pets and Animals, Photography, Finance and Money Management, Art and Design, Career Development, Social Issues and Activism, Travel Tips, Relationships and Dating, Self-Care and Mental Health, Home Organization, Beauty and Skincare, Green Living and Sustainability, Home Renovation, Entrepreneurship and Business, Personal Stories and Reflections, Food, Cooking Tips, Product Reviews, Travel Adventures, Lifestyle, Home Decor, Crafts and DIY, Book and Movie Reviews, Fashion and Beauty, Health and Fitness, Technology, Inspiration and Motivation, Parenting and Family, Gardening and Plants, Pets and Animals, Photography, Finance and Money Management, Art and Design, Career Development, Social Issues and Activism, Travel Tips, Relationships and Dating, Self-Care and Mental Health, Home Organization, Beauty and Skincare, Green Living and Sustainability, Home Renovation, Entrepreneurship and Business, Personal Stories and Reflections, Recipes, Culinary Experiences, Travel Guides, Personal Development, Wellness Tips, DIY Projects, Artistic Endeavors, Product Recommendations, Technology News, Uplifting Stories, Gardening Tips, Pet Care, Budgeting, Career Advice, Social Justice, Healthy Living, Organization Ideas, Fashion Trends, Fitness Tips, Motivational Quotes, Creative Projects, Book Recommendations, Movie Reviews, Home Improvement, Entrepreneurial Success, Personal Growth, Eco-Friendly Living"
         />
         <link rel="canonical" href="https://www.explore-blog.com" />
-        <title>Explore Blog | Discover a World of Diverse Insights</title>
+        <title>10m Blogs | Discover a World of Diverse Insights</title>
       </Head>
       <main className={`min-h-screen`}>
         {/* hero section */}
@@ -144,6 +145,8 @@ export default function Home({ data, lastVisibleId }) {
             <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0">
               <Lottie animationData={animationData} />
             </div>
+
+            {/* search input */}
             <div className="lg:flex-grow md:w-1/2 lg:pl-24 md:pl-16 flex flex-col md:items-start md:text-left items-center text-center">
               <div className="flex w-full md:justify-start justify-center items-end">
                 <div className="relative w-full lg:w-full xl:w-2/3 flex justify-center items-center">
@@ -152,7 +155,7 @@ export default function Home({ data, lastVisibleId }) {
                     id="search"
                     name="search"
                     placeholder="Top 10 books..."
-                    className="w-full bg-opacity-50 border-2 border-gray-300 focus:ring-2 focus:ring-gray-300 focus:bg-transparent  text-base outline-none text-gray-700 py-2 leading-8 transition-colors duration-200 ease-in-out rounded-full px-5 pr-12"
+                    className="w-full  bg-opacity-50 border-2 bg-transparent border-gray-300 focus:ring-2 focus:ring-gray-300 focus:bg-transparent  text-base outline-none text-gray-700 py-2 leading-8 transition-colors duration-200 ease-in-out rounded-full px-5 pr-12"
                     onKeyDown={searchHandler}
                   />
                   {/* search icon */}

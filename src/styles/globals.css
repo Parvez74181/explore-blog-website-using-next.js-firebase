@@ -100,3 +100,14 @@ h6 {
     1.25rem
   );
 }
+.makeStyles-iconContainer-19,
+.makeStyles-container-17 {
+  padding: 0 !important;
+  margin: 0 !important;
+  padding-top: 5px !important;
+}
+.makeStyles-copyContainer-21 {
+  display: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}

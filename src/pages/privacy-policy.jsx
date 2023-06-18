@@ -6,7 +6,7 @@ const privecyPolicy = () => {
       <Head>
         <meta
           name="description"
-          content="Welcome to Explore Blog, a place where I share my passion for a variety of topics, including food, cooking, reviews, DIY projects, and more. Through this blog, I aim to provide you with valuable insights, inspiration, and practical tips to enhance your everyday life."
+          content="Welcome to 10m Blogs, a place where I share my passion for a variety of topics, including food, cooking, reviews, DIY projects, and more. Through this blog, I aim to provide you with valuable insights, inspiration, and practical tips to enhance your everyday life."
         />
         <meta
           name="keywords"
@@ -14,7 +14,7 @@ const privecyPolicy = () => {
         />
 
         <title>
-          Explore Blog | Privacy Policy | Discover a World of Diverse Insights
+          10m Blogs | Privacy Policy | Discover a World of Diverse Insights
         </title>
       </Head>
       <div className="mx-auto w-2/3 leading-10 my-10">
@@ -60,7 +60,7 @@ const privecyPolicy = () => {
           <li>
             <p>
               <strong>Company</strong> (referred to as either "the Company",
-              "We", "Us" or "Our" in this Agreement) refers to Explore Blog.
+              "We", "Us" or "Our" in this Agreement) refers to 10m Blogs.
             </p>
           </li>
           <li>
@@ -113,7 +113,7 @@ const privecyPolicy = () => {
           </li>
           <li>
             <p>
-              <strong>Website</strong> refers to Explore Blog, accessible from{" "}
+              <strong>Website</strong> refers to 10m Blogs, accessible from{" "}
               <a
                 href="https://www.explore-blog.com"
                 rel="external nofollow noopener"

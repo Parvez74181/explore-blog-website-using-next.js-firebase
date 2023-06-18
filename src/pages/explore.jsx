@@ -12,7 +12,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../utils/firebaseConfig";
 import { useEffect, useState } from "react";
-
+import { useRouter } from "next/router";
 import InfiniteScroll from "react-infinite-scroll-component";
 import swal from "sweetalert";
 import Lottie from "lottie-react";
@@ -65,8 +65,8 @@ async function getBlogs(lastVisible = null) {
 
 export default function Explore({ data, lastVisibleId }) {
   const [postData, setPostData] = useState([]);
-
   const [currentLastVisible, setCurrentLastVisible] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     setPostData(data);
@@ -78,6 +78,20 @@ export default function Explore({ data, lastVisibleId }) {
     };
     if (lastVisibleId !== null) getLastVisibleBlogById();
   }, [data]);
+
+  // search handler
+  const searchHandler = (e) => {
+    if (e.keyCode === 13 || e.key === "Enter") {
+      let searchText = e.target.value.trim().toLowerCase();
+      if (searchText) router.push(`/blog/search/${searchText}`);
+    } else if (e.type === "click") {
+      let parentNodeItem = e.target.parentNode.parentNode;
+      let searchInput = parentNodeItem.querySelector("#search");
+
+      searchInput = searchInput?.value?.trim().toLowerCase();
+      if (searchInput) router.push(`/blog/search/${searchInput}`);
+    }
+  };
 
   // to load more blogs when user approach to the bottom of content
   const loadMoreBlogs = async () => {
@@ -106,7 +120,7 @@ export default function Explore({ data, lastVisibleId }) {
       <Head>
         <meta
           name="description"
-          content="Welcome to Explore Blog, a place where I share my passion for a variety of topics, including food, cooking, reviews, DIY projects, and more. Through this blog, I aim to provide you with valuable insights, inspiration, and practical tips to enhance your everyday life."
+          content="Welcome to 10m Blogs, a place where I share my passion for a variety of topics, including food, cooking, reviews, DIY projects, and more. Through this blog, I aim to provide you with valuable insights, inspiration, and practical tips to enhance your everyday life."
         />
         <meta
           name="keywords"
@@ -114,7 +128,7 @@ export default function Explore({ data, lastVisibleId }) {
         />
 
         <title>
-          Explore Blog | Explore | Discover a World of Diverse Insights
+          10m Blogs | Explore | Discover a World of Diverse Insights
         </title>
       </Head>
 
@@ -129,22 +143,61 @@ export default function Explore({ data, lastVisibleId }) {
           <div
             className={`flex justify-center items-center flex-col lg:flex-row px-5 md:px-20 gap-5 pt-5`}
           >
-            <div className="w-full lg:w-1/2 lg:order-last">
-              <h2
-                className={`${styles["explore-main-title"]} text-5xl md:text-6xl lg:text-8xl tracking-wider text-center`}
-              >
-                Explore
-              </h2>
-              <p
-                className={`${styles["explore-paragraph"]} text-md text-center mt-5 leading-8`}
-              >
-                Our Explore Page is a treasure trove of inspiration, practical
-                tips, and captivating content. Immerse yourself in mouthwatering
-                recipes, honest reviews, exciting DIY projects, and more. Join
-                us on this adventure of exploration and unlock new dimensions of
-                joy and fulfillment. Let's dive in together!
-              </p>
+            <div className="w-full md:w-1/2 lg:order-last">
+              {/* texts */}
+              <div className="w-full ">
+                <h2
+                  className={`${styles["explore-main-title"]} text-5xl md:text-6xl lg:text-8xl tracking-wider text-center`}
+                >
+                  Explore
+                </h2>
+                <p
+                  className={`${styles["explore-paragraph"]} text-md text-center mt-5 leading-8`}
+                >
+                  Our Explore Page is a treasure trove of inspiration, practical
+                  tips, and captivating content. Immerse yourself in
+                  mouthwatering recipes, honest reviews, exciting DIY projects,
+                  and more. Join us on this adventure of exploration and unlock
+                  new dimensions of joy and fulfillment. Let's dive in together!
+                </p>
+              </div>
+
+              {/* search input */}
+              <div className="lg:flex-grow flex my-5 flex-col md:items-start  items-center text-center">
+                <div className="flex w-full md:justify-start justify-center items-end">
+                  <div className="relative mx-auto w-[90%] lg:w-full xl:w-2/3 flex justify-center items-center">
+                    <input
+                      type="search"
+                      id="search"
+                      name="search"
+                      placeholder="Top 10 books..."
+                      className="w-full bg-opacity-50 border-2 bg-transparent border-gray-500 focus:shadow-xl focus:bg-transparent text-base placeholder-gray-500 outline-none text-black py-2 leading-8 transition-colors duration-200 ease-in-out rounded-full px-5 pr-12"
+                      onKeyDown={searchHandler}
+                    />
+                    {/* search icon */}
+                    <button
+                      onClick={searchHandler}
+                      className="absolute right-3"
+                    >
+                      <svg
+                        className="w-8 h-8  text-gray-500 ml-2 cursor-pointer hover:text-gray-700 "
+                        aria-hidden="true"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                          clipRule="evenodd"
+                        ></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
+
             <Lottie animationData={animationData} className="w-full md:w-1/2" />
           </div>
 
