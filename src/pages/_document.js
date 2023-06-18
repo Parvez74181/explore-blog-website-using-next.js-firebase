@@ -31,7 +31,7 @@ export default function Document() {
           content="Welcome to Explore Blog, a place where I share my passion for a variety of topics, including food, cooking, reviews, DIY projects, and more. Through this blog, I aim to provide you with valuable insights, inspiration, and practical tips to enhance your everyday life."
         />
         <meta property="og:image" content={"/logo.svg"} />
-        <meta property="og:url" content="https://www.explore-blog.com" />
+        <meta property="og:url" content="https://www.10mblogs.xyz" />
 
         {/* <!-- Twitter Card tags --> */}
         <meta name="twitter:card" content="summary_large_image" />
