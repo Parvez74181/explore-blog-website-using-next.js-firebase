@@ -7,6 +7,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import LoadingBar from "react-top-loading-bar";
 import Loader from "../../components/Loader";
+import { Analytics } from "@vercel/analytics/react";
 
 export default function App({ Component, pageProps }) {
   const [progress, setProgress] = useState(0);
@@ -47,7 +48,11 @@ export default function App({ Component, pageProps }) {
         progress={progress}
         onLoaderFinished={() => setProgress(0)}
       />
-      {!loading && <Component {...pageProps} />}
+      {!loading && (
+        <Component {...pageProps}>
+          <Analytics />
+        </Component>
+      )}
       {!loading && <Footer />}
     </>
   );

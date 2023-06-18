@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@vercel/analytics": "^1.0.1",
     "aos": "^2.3.4",
     "firebase": "^9.22.2",
     "firebase-admin": "^11.9.0",
@@ -17,11 +18,9 @@
     "jsonwebtoken": "^9.0.0",
     "lottie-react": "^2.4.0",
     "next": "^13.3.1",
-    "next-auth": "^4.22.1",
     "nodemailer": "^6.9.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-firebase-hooks": "^5.1.1",
     "react-infinite-scroll-component": "^6.1.0",
     "react-top-loading-bar": "^2.3.1",
     "sass": "^1.62.1",
