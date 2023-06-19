@@ -46,15 +46,23 @@ export default function Editor({ setDescription }) {
 
   // insert image to text editor
   const insertImage = useCallback(() => {
-    const url = prompt("Enter the URL of the image:");
+    let url = prompt("Enter the URL of the image: ");
+    const title = prompt("Enter the image alt text: ");
 
     if (url) {
-      const imgId = url.split("/")[5];
-
-      format(
-        "insertHTML",
-        `<img src="https://drive.google.com/uc?export=view&id=${imgId}" loading='lazy' alt='${imgId}'/>`
-      );
+      if (url.includes("drive.google.com")) {
+        url = url.split("/")[5];
+        format(
+          "insertHTML",
+          `<img src="https://drive.google.com/uc?export=view&id=${url}" loading='lazy' alt='${title}'/>`
+        );
+      } else {
+        console.log(url);
+        format(
+          "insertHTML",
+          `<img src="${url}" loading='lazy' alt='${title}'/>`
+        );
+      }
     }
   }, [format]);
 
@@ -97,6 +105,7 @@ export default function Editor({ setDescription }) {
       const link = document.createElement("a");
       link.href = "#" + heading.id;
       link.textContent = heading.textContent;
+      link.addEventListener("click", (e) => e.preventDefault()); // Prevent default link behavior
 
       // Append the link to the list item
       listItem.appendChild(link);

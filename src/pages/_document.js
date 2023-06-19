@@ -1,4 +1,5 @@
 import { Html, Head, Main, NextScript } from "next/document";
+import { breadcrumbListJsonLd } from "../../utils/breadcrumbListJsonLd ";
 
 export default function Document() {
   return (
@@ -21,34 +22,18 @@ export default function Document() {
 
         <meta charSet="UTF-8" />
 
-        {/* <!-- Open Graph tags --> */}
-        <meta
-          property="og:title"
-          content="Explore Blog | Discover a World of Diverse Insights"
-        />
-        <meta
-          property="og:description"
-          content="Welcome to Explore Blog, a place where I share my passion for a variety of topics, including food, cooking, reviews, DIY projects, and more. Through this blog, I aim to provide you with valuable insights, inspiration, and practical tips to enhance your everyday life."
-        />
-        <meta property="og:image" content={"/logo.svg"} />
-        <meta property="og:url" content="https://www.10mblogs.xyz" />
-
-        {/* <!-- Twitter Card tags --> */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Your Blog Title" />
-        <meta
-          name="twitter:description"
-          content="Brief description of your blog or blog post."
-        />
-        <meta
-          name="twitter:image"
-          content="URL to the featured image for your blog post."
-        />
-
         <meta name="author" content="Parvez" />
 
         <meta name="robots" content="index,follow" />
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(breadcrumbListJsonLd),
+          }}
+        ></script>
       </Head>
+
       <body>
         <Main />
         <NextScript />

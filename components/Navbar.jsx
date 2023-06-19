@@ -70,7 +70,7 @@ const Navbar = () => {
             <img
               src="/logo.png"
               className="w-[100px] mr-3"
-              alt="explore blog logo"
+              alt="10m blogs logo"
             />
           </Link>
 

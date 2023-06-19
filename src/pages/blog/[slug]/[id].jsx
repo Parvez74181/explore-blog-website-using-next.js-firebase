@@ -30,6 +30,14 @@ export default function Content({ data }) {
       });
       setCategories(list);
     });
+
+    // to add blank target
+    let links = document.querySelectorAll("#desc-full a");
+    links.forEach((link) => {
+      if (link.parentNode.parentNode.nodeName === "UL") return; // don't need to add blank to the table-of-content of ul tag
+
+      link.target = "_blank";
+    });
   }, [data, post]);
 
   // search handler
@@ -47,22 +55,18 @@ export default function Content({ data }) {
   };
 
   // Share link for Facebook
-  function createFacebookShareLink(url, title, description, imageUrl) {
+  function createFacebookShareLink(url) {
     window.open(
-      `https://www.facebook.com/sharer.php?u=${encodeURIComponent(
-        url
-      )}&title=${encodeURIComponent(title)}&description=${encodeURIComponent(
-        description
-      )}&picture=${encodeURIComponent(imageUrl)}`,
+      `https://www.facebook.com/share.php?u=${encodeURIComponent(url)}`,
       "_blank"
     );
   }
 
   // Share link for Instagram
-  function createInstagramShareLink(imageUrl, caption) {
+  function createInstagramShareLink(url, caption) {
     window.open(
       `https://www.instagram.com/share?url=${encodeURIComponent(
-        imageUrl
+        url
       )}&caption=${encodeURIComponent(caption)}`,
       "_blank"
     );
@@ -71,23 +75,19 @@ export default function Content({ data }) {
   // Share link for Twitter
   function createTwitterShareLink(url, text, hashtags) {
     window.open(
-      `https://twitter.com/intent/tweet?url=${encodeURIComponent(
+      `http://twitter.com/share?&url=${encodeURIComponent(
         url
-      )}&text=${encodeURIComponent(text)}&hashtags=${encodeURIComponent(
-        hashtags
-      )}`,
+      )}&text=${text}&hashtags=${encodeURIComponent(hashtags)}`,
       "_blank"
     );
   }
 
   // Share link for Pinterest
-  function createPinterestShareLink(url, imageUrl, description) {
+  function createPinterestShareLink(url, description) {
     window.open(
       `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(
         url
-      )}&media=${encodeURIComponent(imageUrl)}&description=${encodeURIComponent(
-        description
-      )}`,
+      )}&description=${encodeURIComponent(description)}`,
       "_blank"
     );
   }
@@ -95,7 +95,9 @@ export default function Content({ data }) {
   // Share link for email
   function createEmailShareLink(subject, body) {
     window.open(
-      `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
+      `mailto:?subject=${encodeURIComponent(
+        subject
+      )}&body=Hey, I found this article on the web! 😍🤩:  ${encodeURIComponent(
         body
       )}`,
       "_blank"
@@ -107,7 +109,7 @@ export default function Content({ data }) {
       <Head>
         <meta
           name="description"
-          content={`${post?.data?.postData["meta-description"]}`}
+          content={`${post?.data?.postData?.metaDescription}`}
         />
         <meta
           name="keywords"
@@ -116,13 +118,54 @@ export default function Content({ data }) {
           })}
         />
 
+        {/* <!-- Open Graph tags --> */}
+        <meta
+          property="og:title"
+          content={`${post?.data?.postData?.title} | 10mBlogs | Discover a World of Diverse
+          Insights`}
+        />
+        <meta
+          property="og:description"
+          content="Welcome to 10mBlogs, a place where I share my passion for a variety of topics, including food, cooking, reviews, DIY projects, and more. Through this blog, I aim to provide you with valuable insights, inspiration, and practical tips to enhance your everyday life."
+        />
+        <meta
+          property="og:image"
+          content={`https://drive.google.com/uc?export=view&id=${
+            post?.data?.postData?.thumbnail.split("/")[5]
+          }`}
+        />
+        <meta property="og:url" content={post?.postData ? location.href : ""} />
+
+        {/* <!-- Twitter Card tags --> */}
+        <meta
+          name="twitter:card"
+          content={`${post?.data?.postData?.title} | 10mBlogs | Discover a World of Diverse Insights`}
+        />
+        <meta
+          name="twitter:title"
+          content={`${post?.data?.postData?.title} | 10mBlogs | Discover a World of Diverse Insights`}
+        />
+        <meta
+          name="twitter:description"
+          content={`${post?.data?.postData?.metaDescription}`}
+        />
+        <meta
+          name="twitter:image"
+          content={`https://drive.google.com/uc?export=view&id=${
+            post?.data?.postData?.thumbnail.split("/")[5]
+          }`}
+        />
+
         <title>
-          10m Blogs | {post?.data?.postData?.title} | Discover a World of
+          {post?.data?.postData?.metaTitle} | 10mBlogs | Discover a World of
           Diverse Insights
         </title>
       </Head>
 
-      <main className={`${styles["slug-main"]} min-h-screen bg-white`}>
+      <main
+        id="slug-main"
+        className={`${styles["slug-main"]} min-h-screen bg-white`}
+      >
         <section
           className="flex justify-center items-start flex-wrap  py-5  mx-5 md:mx-20 "
           style={{ gap: "150px" }}
@@ -139,7 +182,9 @@ export default function Content({ data }) {
             <div className="relative" style={{ width: "100%" }}>
               {/* category */}
               <div className={`${styles["category"]} my-5  tracking-widest`}>
-                <Link href="#">{post?.data?.postData?.category}</Link>
+                <Link href={`/blog/category/${post?.data?.postData?.category}`}>
+                  {post?.data?.postData?.category}
+                </Link>
               </div>
 
               {/* title */}
@@ -180,14 +225,7 @@ export default function Content({ data }) {
                     className="fa-brands fa-facebook-f cursor-pointer"
                     style={{ color: "#3b5998" }}
                     onClick={() => {
-                      createFacebookShareLink(
-                        location.origin,
-                        post?.data?.postData?.title,
-                        post?.data?.postData?.metaDescription,
-                        `https://drive.google.com/uc?export=view&id=${
-                          post?.data?.postData?.thumbnail.split("/")[5]
-                        }`
-                      );
+                      createFacebookShareLink(location.href);
                     }}
                   ></i>
 
@@ -198,9 +236,7 @@ export default function Content({ data }) {
                     style={{ color: "#fa7e1e " }}
                     onClick={() => {
                       createInstagramShareLink(
-                        `https://drive.google.com/uc?export=view&id=${
-                          post?.data?.postData?.thumbnail.split("/")[5]
-                        }`,
+                        location.href,
                         post?.data?.postData?.title
                       );
                     }}
@@ -213,8 +249,8 @@ export default function Content({ data }) {
                     style={{ color: "#00acee" }}
                     onClick={() => {
                       createTwitterShareLink(
-                        location.origin,
-                        post?.data?.postData?.title,
+                        location.href,
+                        "Hey, I found this article on the web! 😍🤩",
                         post?.data?.postData?.tag
                       );
                     }}
@@ -239,10 +275,7 @@ export default function Content({ data }) {
                     style={{ color: "#E60023" }}
                     onClick={() => {
                       createPinterestShareLink(
-                        location.origin,
-                        `https://drive.google.com/uc?export=view&id=${
-                          post?.data?.postData?.thumbnail.split("/")[5]
-                        }`,
+                        location.href,
                         post?.data?.postData?.metaDescription
                       );
                     }}
@@ -253,23 +286,31 @@ export default function Content({ data }) {
               {/* description */}
 
               <div
+                id="desc-full"
                 className={`${styles["desc-full"]} my-6 font-normal  tracking-wider leading-8 text-black `}
               >
                 {parse(`${post?.data?.postData?.description}`)}
               </div>
             </div>
+
+            <Link
+              href={"#slug-main"}
+              className="fixed bottom-5 right-5 w-10 h-10 rounded-full shadow-xl flex justify-center items-center bg-gray-500"
+            >
+              <i className="fa-solid fa-angle-up text-white text-xl"></i>
+            </Link>
           </div>
 
           {/* ////////////////////// */}
           {/* right side bar */}
           <div
-            className="sticky top-8 mt-20 w-full lg:w-3/12 flex flex-col"
+            className="sticky top-0 md:top-8 md:mt-20  w-full lg:w-3/12 flex flex-col"
             style={{ minHeight: "100vh", gap: "50px" }}
           >
             {/* search input */}
-            <div className="relative  my-5 text-center">
+            <div className="relative  md:my-5 text-center">
               <div className="flex w-full md:justify-start flex-col justify-center items-end">
-                <p className="text-left w-full my-3 pl-2 text-[18px]">
+                <p className="text-left w-full md:my-3 pl-2 text-[18px]">
                   Explore more relevant content!
                 </p>
                 <div className="relative mx-auto w-full flex justify-center items-center">

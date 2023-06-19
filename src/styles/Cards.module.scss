@@ -3,6 +3,7 @@
 
 .slug-main {
   font-family: "Gothic A1", sans-serif !important;
+
   h1 {
     font-size: clamp(2.113rem, 1.9252rem + 0.9390000000000001vw, 3.052rem);
   }
@@ -125,19 +126,45 @@
   }
 }
 .desc-full {
-  font-family: "Inter", sans-serif;
+  font-family: "Inter", sans-serif !important;
+
+  tr,
+  td {
+    font-family: "Inter", sans-serif !important;
+    font-size: 16px !important;
+  }
+  td {
+    width: 10px !important;
+  }
   p {
     line-height: 32px !important;
   }
   a {
-    color: var(--secondary-color);
     cursor: pointer;
+    color: blue;
     &:hover {
       text-decoration: underline;
     }
   }
-
+  ul {
+    font-size: 16px !important;
+  }
   img {
     width: 100% !important;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .desc-full {
+    table {
+      width: 350px !important;
+    }
+  }
+}
+@media only screen and (max-width: 370px) {
+  .desc-full {
+    table {
+      width: 200px !important;
+    }
   }
 }

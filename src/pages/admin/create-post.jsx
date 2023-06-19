@@ -16,6 +16,7 @@ export default function CreatePost() {
     description: "",
     category: "",
     tag: [],
+    metaTitle: "",
     metaDescription: "",
   });
   const [adminAccessToken, setAdminAccessToken] = useState(false);
@@ -168,6 +169,25 @@ export default function CreatePost() {
               <TagInputBox setTags={setPostData} />
 
               {/* metadata adding options */}
+
+              {/* meta title */}
+              <div className="mb-6 mt-6">
+                <label
+                  htmlFor="meta-description"
+                  className="block mb-2 text-sm font-medium "
+                >
+                  Meta Title
+                </label>
+                <textarea
+                  name="metaTitle"
+                  id="meta-title"
+                  placeholder="meta title..."
+                  className="mb-10 block w-full md:w-9/12 p-3 px-4  border rounded-lg focus:ring-blue-500 focus:border-blue-500   placeholder-slate-600 tracking-wider"
+                  value={postData.metaTitle}
+                  onChange={handleInputChange}
+                  required
+                ></textarea>
+              </div>
 
               {/* meta description */}
               <div className="mb-6 mt-6">

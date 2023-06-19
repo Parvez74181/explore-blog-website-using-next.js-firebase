@@ -34,7 +34,7 @@ export default function Card({ postData }) {
               alt={slug}
               height={170}
               width={170}
-              style={{ objectFit: "cover", width: "100%", height: "170px" }}
+              style={{ objectFit: "cover", width: "100%", height: "200px" }}
               priority={true}
             />
           </Link>

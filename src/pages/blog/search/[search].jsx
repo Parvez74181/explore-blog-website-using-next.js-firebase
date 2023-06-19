@@ -21,6 +21,7 @@ import Link from "next/link";
 import InfiniteScroll from "react-infinite-scroll-component";
 import styles from "../../../styles/Search.module.scss";
 import Head from "next/head";
+import Button from "../../../../components/Button";
 
 // to get more blogs by InfiniteScroll component
 async function getBlogs(lastVisible = null, search = null) {
@@ -128,7 +129,7 @@ export default function getPostsBySearch({ data, lastVisibleId }) {
         />
 
         <title>
-          10m Blogs | {search} | Discover a World of Diverse Insights
+          {search} | 10mBlogs | Discover a World of Diverse Insights
         </title>
       </Head>
 
@@ -217,15 +218,12 @@ export default function getPostsBySearch({ data, lastVisibleId }) {
               />
               <Link
                 href={"/"}
-                id={styles["btn"]}
                 className={`rounded-md relative mx-auto inline-flex justify-center items-center drop-shadow-xl`}
                 style={{
                   padding: "3px",
                 }}
               >
-                <span className="text-black tracking-widest relative px-4 py-3 transition-all ease-in duration-75 bg-gray-100 hover:text-white rounded-md">
-                  <i className="fa-solid fa-arrow-left"></i> Back to home
-                </span>
+                <Button text={"Back to home"} />
               </Link>
             </div>
           </>

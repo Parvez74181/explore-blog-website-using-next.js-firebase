@@ -45,7 +45,7 @@ const Footer = () => {
           {/* bottom part */}
           <div className="px-10 md:px-32 py-6 bg-gray-700 md:flex md:items-center md:justify-between ">
             <span className="text-sm sm:text-center flex justify-center md:justify-normal">
-              © 2023 <Link href="/"> Explore Blog™</Link>. All Rights Reserved.
+              © 2023 <Link href="/">10mBlogs™</Link>. All Rights Reserved.
             </span>
             {/* social media icons */}
             <div className="mt-4 space-x-6 flex justify-center md:justify-normal md:mt-0">

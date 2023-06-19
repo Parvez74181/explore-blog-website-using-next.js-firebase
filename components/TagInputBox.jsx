@@ -7,7 +7,7 @@ function TagInputBox({ setTags }) {
   // for adding tags into the tag box
   const addTag = (e) => {
     if (e.key === "Enter") {
-      let value = e.target.value;
+      let value = e.target.value.toLowerCase();
 
       if (value.length <= 0) return; // if input value is null then do not add to tags
 
@@ -17,7 +17,6 @@ function TagInputBox({ setTags }) {
   };
 
   useEffect(() => {
-    console.log(tags);
     setTags((prevData) => ({
       ...prevData,
       tag: tags,
@@ -33,7 +32,7 @@ function TagInputBox({ setTags }) {
   // addTagfromTextArea handler
   const addTagfromTextArea = (e) => {
     let values = e.target.value.split(","); // split them based by comma and make an array
-    let trimmedValues = values.map((value) => value.trim()); // get trimmedValues
+    let trimmedValues = values.map((value) => value.trim().toLowerCase()); // get trimmedValues
     setLocalTags([...tags, ...trimmedValues]);
   };
 
