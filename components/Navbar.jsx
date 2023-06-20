@@ -58,6 +58,7 @@ const Navbar = () => {
     if (e.keyCode === 13 || e.key === "Enter") {
       let searchText = e.target.value.trim().toLowerCase();
       if (searchText) router.push(`/blog/search/${searchText}`);
+      closeNavbar();
     }
   };
   return (
@@ -128,14 +129,6 @@ const Navbar = () => {
               />
             </div>
 
-            {/* user login icon */}
-            {/* <Link href="/login">
-              <i
-                title="login"
-                className="fa-regular fa-circle-user  ps-2 md:ms-3 p-0 pt-1 mr-3 md:mr-0 text-2xl cursor-pointer"
-              ></i>
-            </Link> */}
-
             {/* hamburger menu for mobile devices */}
             <button
               data-collapse-toggle="navbar-search"
@@ -190,6 +183,7 @@ const Navbar = () => {
                 // id={styles["search-navbar"]}
                 className="block w-full p-2 pl-10 text-sm  border rounded-lg border-gray-700 placeholder-gray-600 font-normal focus:border-gray-900 outline-none"
                 placeholder="Search..."
+                onKeyUp={searchHandler}
               />
             </div>
 

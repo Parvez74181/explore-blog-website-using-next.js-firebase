@@ -27,14 +27,22 @@ export default function Card({ postData }) {
         <div className="w-full relaive px-3 pt-3 md:p-3">
           <Link href={`/blog/${slug}/${id}`} className="w-1/3">
             <Image
-              className="rounded-md "
-              src={`https://drive.google.com/uc?export=view&id=${
-                thumbnail.split("/")[5]
+              className={`rounded-md ${
+                thumbnail.includes("drive.google.com")
+                  ? "object-cover"
+                  : "object-contain"
               }`}
+              src={
+                thumbnail.includes("drive.google.com")
+                  ? `https://drive.google.com/uc?export=view&id=${
+                      thumbnail.split("/")[5]
+                    }`
+                  : thumbnail
+              }
               alt={slug}
               height={170}
               width={170}
-              style={{ objectFit: "cover", width: "100%", height: "200px" }}
+              style={{ width: "100%", height: "210px" }}
               priority={true}
             />
           </Link>
@@ -61,7 +69,7 @@ export default function Card({ postData }) {
           {/* title */}
           <Link href={`/blog/${slug}/${id}`}>
             <h5
-              className={`${styles["title"]} font-bold text-xl md:text-2xl tracking-wider leading-7 `}
+              className={`${styles["title"]} font-bold text-xl  tracking-wider leading-7 `}
             >
               {title}
             </h5>
@@ -69,7 +77,7 @@ export default function Card({ postData }) {
 
           {/* description */}
           <div
-            className={`${styles["desc"]} mb-3 font-normal text-md tracking-wider leading-7 `}
+            className={`${styles["desc"]} mb-3 text-md tracking-wider leading-7`}
             style={{ height: "115px" }}
           >
             {postData?.data?.postData?.["meta-description"] ||
@@ -77,7 +85,7 @@ export default function Card({ postData }) {
           </div>
           <Link
             href={`/blog/${slug}/${id}`}
-            className={`${styles["read-more-btn"]} inline-flex items-center text-sm tracking-wide text-center  rounded-md text-blue-500 transition-all delay-75 `}
+            className={`${styles["read-more-btn"]} inline-flex items-center text-sm tracking-wide text-center  rounded-md text-blue-700 bg-blue-100 px-5 py-3 transition-all delay-75 `}
           >
             Read more &nbsp;
             <svg

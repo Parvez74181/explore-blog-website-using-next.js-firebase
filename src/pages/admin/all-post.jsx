@@ -92,7 +92,7 @@ export default function allPosts({ data, lastVisibleId }) {
   useEffect(() => {
     setPostData(data);
     setLoading(false);
-    console.log(data);
+
     // get the lastVisible blog from the getServerSideProps lastVisibleId and set them to currentLastVisible
     const getLastVisibleBlogById = async () => {
       let lastVisibleRef = await getDoc(doc(db, "blogs", lastVisibleId));

@@ -55,10 +55,19 @@ export default function CreatePost() {
         icon: "success",
       });
 
-      // after 200ms reload the page
+      // send a notification to the user if user permitted the notification permission
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted")
+          new Notification(postData?.metaTitle, {
+            body: postData?.metaDescription,
+            icon: "https://i.postimg.cc/JG0Kc57j/favicon.png",
+          });
+      });
+
+      // after 3s reload the page
       setTimeout(() => {
         location.reload();
-      }, 200);
+      }, 3000);
     } catch (error) {
       console.log(error);
       swal({
@@ -178,7 +187,7 @@ export default function CreatePost() {
                 >
                   Meta Title
                 </label>
-                <textarea
+                <input
                   name="metaTitle"
                   id="meta-title"
                   placeholder="meta title..."
@@ -186,7 +195,7 @@ export default function CreatePost() {
                   value={postData.metaTitle}
                   onChange={handleInputChange}
                   required
-                ></textarea>
+                />
               </div>
 
               {/* meta description */}

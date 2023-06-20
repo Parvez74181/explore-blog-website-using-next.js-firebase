@@ -31,6 +31,12 @@ export default function App({ Component, pageProps }) {
     router.events.on("routeChangeStart", handleRouteChangeStart);
     router.events.on("routeChangeComplete", handleRouteChangeComplete);
 
+    Notification.requestPermission().then((permission) => {
+      // If the user accepts, let's set localStorage
+      if (permission === "granted")
+        localStorage.setItem("permission", "granted");
+    });
+
     return () => {
       router.events.off("routeChangeStart", handleRouteChangeStart);
       router.events.off("routeChangeComplete", handleRouteChangeComplete);

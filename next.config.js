@@ -2,7 +2,11 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["drive.google.com"],
+    domains: [
+      "drive.google.com",
+      "ws-na.amazon-adsystem.com",
+      "m.media-amazon.com",
+    ],
   },
 };
 

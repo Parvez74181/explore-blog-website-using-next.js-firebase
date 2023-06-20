@@ -1,6 +1,5 @@
 #text-box {
   min-height: 40vh;
-  max-height: 70vh;
   overflow-y: auto;
 
   h1 {
@@ -46,13 +45,19 @@
   ol {
     list-style: decimal;
   }
-
   a {
-    text-decoration: underline;
-    background: linear-gradient(45deg, #ff00cc, #4242ac) !important;
-    background-clip: text !important;
-    color: transparent;
     cursor: pointer;
+    color: blue;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  button {
+    a {
+      text-decoration: none;
+      color: black;
+      cursor: pointer;
+    }
   }
 }
 
@@ -77,6 +82,7 @@
     border-radius: 10px;
   }
 }
+
 #post-submit-button {
   span {
     &:hover {

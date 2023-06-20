@@ -48,9 +48,6 @@
   ol {
     list-style: decimal;
   }
-  .table-of-content {
-    border: 1px solid black;
-  }
 }
 
 .card {
@@ -127,17 +124,27 @@
 }
 .desc-full {
   font-family: "Inter", sans-serif !important;
-
+  div,
+  tbody {
+    width: auto !important;
+  }
   tr,
   td {
     font-family: "Inter", sans-serif !important;
     font-size: 16px !important;
   }
   td {
-    width: 10px !important;
+    width: 250px !important;
   }
   p {
     line-height: 32px !important;
+  }
+  button {
+    a {
+      text-decoration: none;
+      color: black;
+      cursor: pointer;
+    }
   }
   a {
     cursor: pointer;
@@ -161,6 +168,7 @@
     }
   }
 }
+
 @media only screen and (max-width: 370px) {
   .desc-full {
     table {

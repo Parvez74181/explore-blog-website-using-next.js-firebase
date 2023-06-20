@@ -13,6 +13,7 @@ import { db } from "../../../../utils/firebaseConfig";
 import { useEffect, useState } from "react";
 import parse from "html-react-parser";
 import { useRouter } from "next/router";
+import swal from "sweetalert";
 
 export default function Content({ data }) {
   const [post, setPost] = useState([]);
@@ -39,6 +40,24 @@ export default function Content({ data }) {
       link.target = "_blank";
     });
   }, [data, post]);
+
+  async function shareContent() {
+    const shareData = {
+      title: post?.data?.postData?.title,
+      text: post?.data?.postData?.metaDescription,
+      url: location.href,
+    };
+
+    if (navigator.share) await navigator.share(shareData);
+    else {
+      await navigator.clipboard.writeText(location.href);
+      swal({
+        title: "success",
+        text: "Text coppied!",
+        icon: "success",
+      });
+    }
+  }
 
   // search handler
   const searchHandler = (e) => {
@@ -118,11 +137,12 @@ export default function Content({ data }) {
           })}
         />
 
+        <link rel="canonical" href="https://www.10mblogs.xyz" />
+
         {/* <!-- Open Graph tags --> */}
         <meta
           property="og:title"
-          content={`${post?.data?.postData?.title} | 10mBlogs | Discover a World of Diverse
-          Insights`}
+          content="Discover a World of Diverse Insights | 10mBlogs"
         />
         <meta
           property="og:description"
@@ -130,35 +150,32 @@ export default function Content({ data }) {
         />
         <meta
           property="og:image"
-          content={`https://drive.google.com/uc?export=view&id=${
-            post?.data?.postData?.thumbnail.split("/")[5]
-          }`}
+          content="https://i.postimg.cc/66HmCcBH/Screenshot-2023-06-19-111850.png"
         />
-        <meta property="og:url" content={post?.postData ? location.href : ""} />
+        <meta property="og:url" content="https://www.10mblogs.xyz" />
 
         {/* <!-- Twitter Card tags --> */}
         <meta
           name="twitter:card"
-          content={`${post?.data?.postData?.title} | 10mBlogs | Discover a World of Diverse Insights`}
+          content="Discover a World of Diverse Insights | 10mBlogs"
         />
         <meta
           name="twitter:title"
-          content={`${post?.data?.postData?.title} | 10mBlogs | Discover a World of Diverse Insights`}
+          content="Discover a World of Diverse Insights | 10mBlogs"
         />
         <meta
           name="twitter:description"
-          content={`${post?.data?.postData?.metaDescription}`}
+          content="Welcome to 10mBlogs, a place where I share my passion for a variety of topics, including food, cooking, reviews, DIY projects, and more. Through this blog, I aim to provide you with valuable insights, inspiration, and practical tips to enhance your everyday life."
         />
         <meta
           name="twitter:image"
-          content={`https://drive.google.com/uc?export=view&id=${
-            post?.data?.postData?.thumbnail.split("/")[5]
-          }`}
+          content="https://i.postimg.cc/66HmCcBH/Screenshot-2023-06-19-111850.png"
         />
 
         <title>
-          {post?.data?.postData?.metaTitle} | 10mBlogs | Discover a World of
-          Diverse Insights
+          {post?.data?.postData?.title
+            ? `${post?.data?.postData?.title} | 10mBlogs | Discover a World of Diverse Insights`
+            : "Discover a World of Diverse Insights | 10mBlogs"}
         </title>
       </Head>
 
@@ -195,10 +212,14 @@ export default function Content({ data }) {
               {/* image */}
 
               <Image
-                src={`https://drive.google.com/uc?export=view&id=${
-                  post?.data?.postData?.thumbnail.split("/")[5]
-                }`}
-                className="rounded-md shadow-md md:max-h-[500px]"
+                src={
+                  post?.data?.postData?.thumbnail.includes("drive.google.com")
+                    ? `https://drive.google.com/uc?export=view&id=${
+                        post?.data?.postData?.thumbnail.split("/")[5]
+                      }`
+                    : post?.data?.postData?.thumbnail
+                }
+                className="rounded-md md:max-h-[500px] object-contain"
                 width={558}
                 height={400}
                 style={{
@@ -209,79 +230,7 @@ export default function Content({ data }) {
               ></Image>
 
               {/* share options */}
-              <div
-                className="relative flex justify-between pt-5"
-                style={{ width: "100%" }}
-              >
-                {/* share box */}
-
-                <div
-                  className={`${styles["share-box"]} text-2xl flex justify-between items-center`}
-                  style={{ width: "50%" }}
-                >
-                  {/* facebook */}
-                  <i
-                    title="share by facebook"
-                    className="fa-brands fa-facebook-f cursor-pointer"
-                    style={{ color: "#3b5998" }}
-                    onClick={() => {
-                      createFacebookShareLink(location.href);
-                    }}
-                  ></i>
-
-                  {/* instagram */}
-                  <i
-                    title="share by instagram"
-                    className="fa-brands fa-instagram cursor-pointer"
-                    style={{ color: "#fa7e1e " }}
-                    onClick={() => {
-                      createInstagramShareLink(
-                        location.href,
-                        post?.data?.postData?.title
-                      );
-                    }}
-                  ></i>
-
-                  {/* twitter */}
-                  <i
-                    title="share by twitter"
-                    className="fa-brands fa-twitter cursor-pointer"
-                    style={{ color: "#00acee" }}
-                    onClick={() => {
-                      createTwitterShareLink(
-                        location.href,
-                        "Hey, I found this article on the web! 😍🤩",
-                        post?.data?.postData?.tag
-                      );
-                    }}
-                  ></i>
-
-                  {/* email */}
-                  <i
-                    title="share by email"
-                    className="fa-regular fa-envelope cursor-pointer"
-                    onClick={() => {
-                      createEmailShareLink(
-                        post?.data?.postData?.title,
-                        location.href
-                      );
-                    }}
-                  ></i>
-
-                  {/* pinterest */}
-                  <i
-                    title="share by pinterest"
-                    className="fa-brands fa-pinterest-p cursor-pointer"
-                    style={{ color: "#E60023" }}
-                    onClick={() => {
-                      createPinterestShareLink(
-                        location.href,
-                        post?.data?.postData?.metaDescription
-                      );
-                    }}
-                  ></i>
-                </div>
-              </div>
+              {/* i will do this later */}
 
               {/* description */}
 
@@ -295,7 +244,7 @@ export default function Content({ data }) {
 
             <Link
               href={"#slug-main"}
-              className="fixed bottom-5 right-5 w-10 h-10 rounded-full shadow-xl flex justify-center items-center bg-gray-500"
+              className="fixed bottom-5 right-5 w-12 h-12 rounded-full shadow-xl flex justify-center items-center bg-gray-500 z-50"
             >
               <i className="fa-solid fa-angle-up text-white text-xl"></i>
             </Link>
@@ -304,8 +253,8 @@ export default function Content({ data }) {
           {/* ////////////////////// */}
           {/* right side bar */}
           <div
-            className="sticky top-0 md:top-8 md:mt-20  w-full lg:w-3/12 flex flex-col"
-            style={{ minHeight: "100vh", gap: "50px" }}
+            className="sticky top-0 md:top-24 md:mt-20  w-full lg:w-3/12 flex flex-col"
+            style={{ gap: "50px" }}
           >
             {/* search input */}
             <div className="relative  md:my-5 text-center">
@@ -378,10 +327,6 @@ export default function Content({ data }) {
 export async function getServerSideProps(context) {
   const { id } = context.query;
   const blog = []; //
-  let blogsList = [];
-  const selectedPosts = []; // to store random index posts
-  const randomIndices = []; // to store random indexs
-  const count = 3;
 
   // Fetch data from Firebase
   const docSnap = await getDoc(doc(db, "blogs", id));

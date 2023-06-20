@@ -1,12 +1,14 @@
 import styles from "../../styles/Admin-Panel.module.scss";
 import Link from "next/link";
-
+import { collection, getDoc } from "firebase/firestore";
+import { db } from "../../../utils/firebaseConfig";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import swal from "sweetalert";
 
 export default function Admin() {
   const [adminAccessToken, setAdminAccessToken] = useState(false);
+
   const router = useRouter();
   const { icon, title, text } = router.query;
 
@@ -40,7 +42,7 @@ export default function Admin() {
         icon: icon,
       });
     }
-  }, [title]);
+  }, []);
 
   return (
     <>

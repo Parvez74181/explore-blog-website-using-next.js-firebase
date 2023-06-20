@@ -87,13 +87,14 @@ export default function Editor({ setDescription }) {
   }, [format]);
 
   // table of content
-  const tableOfContent = () => {
+  const tableOfContent = useCallback(() => {
     const textEditor = document.querySelector(".text-box");
     // Get all heading elements
     const headings = textEditor.querySelectorAll("h1, h2, h3, h4, h5, h6");
 
     const headingList = document.createElement("ul"); // Create a ul html tag
     headingList.id = "table-of-content";
+    let listHtml = "";
 
     // Iterate over each heading
     headings.forEach((heading, i) => {
@@ -101,26 +102,12 @@ export default function Editor({ setDescription }) {
       if (!heading.id) heading.id = "heading" + (i + 1);
 
       // Create a list item with a link to the heading
-      const listItem = document.createElement("li");
-      const link = document.createElement("a");
-      link.href = "#" + heading.id;
-      link.textContent = heading.textContent;
-      link.addEventListener("click", (e) => e.preventDefault()); // Prevent default link behavior
-
-      // Append the link to the list item
-      listItem.appendChild(link);
-
-      // Append the list item to the headingList
-      headingList.appendChild(listItem);
+      listHtml += `<li><a href='#${heading.id}'>${heading.textContent}</a></li>`;
     });
 
     // Insert the headingList at the beginning of the text editor
-    if (textEditor.firstChild) {
-      textEditor.insertBefore(headingList, textEditor.firstChild);
-    } else {
-      textEditor.appendChild(headingList);
-    }
-  };
+    format("insertHTML", `<ul id='table-of-content'>${listHtml}</ul>`);
+  });
 
   const handleInput = (e) => {
     setTextEditor(e.target.innerHTML);
@@ -137,7 +124,7 @@ export default function Editor({ setDescription }) {
     <>
       <div className="editor" style={{ width: "100%" }}>
         {/* tools */}
-        <div className="tools mb-10 flex flex-wrap gap-5 md:gap-7 ">
+        <div className="tools mb-10 flex flex-wrap gap-5 md:gap-7 sticky top-24 bg-white shadow-md p-5 rounded-md">
           <button
             title="bold"
             className="fa-solid fa-bold cursor-pointer border border-gray-700  p-2 px-4 rounded-md w-12 flex justify-center items-center bg-white "
@@ -145,6 +132,19 @@ export default function Editor({ setDescription }) {
               format("bold");
             }}
           ></button>
+
+          <button
+            title="add button"
+            className="fa-solid fa-toggle-on cursor-pointer border border-gray-700  p-2 px-4 rounded-md w-12 flex justify-center items-center bg-white "
+            onClick={() => {
+              const buttonTxt = prompt("Enter button text: ");
+              format(
+                "insertHTML",
+                `<button class="p-2 px-5 rounded-full outline-none flex justify-center items-center shadow-lg bg-yellow-400 hover:bg-yellow-300 transition-all delay-75" style='min-width:100px;'>${buttonTxt}</button>`
+              );
+            }}
+          ></button>
+
           <button
             title="italic"
             className="fa-solid fa-italic cursor-pointer border border-gray-700  p-2 px-4 rounded-md w-12 flex justify-center items-center bg-white "
@@ -342,7 +342,6 @@ export default function Editor({ setDescription }) {
           id="desc"
           className="mt-5 w-full h-20 text-editor-output p-3 bg-transparent border border-gray-600 resize "
           value={textEditor}
-          readOnly
         ></textarea>
       </div>
     </>
