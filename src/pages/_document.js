@@ -27,6 +27,15 @@ export default function Document() {
 
         <meta name="robots" content="index,follow" />
 
+        {/* google indexing meta tag */}
+        <meta
+          name="google-site-verification"
+          content="t2bQ1p8cAJTr0lMcrtGMULZirb0GlVA_W76s0VcgRnI"
+        />
+
+        {/* bing indexing meta tag */}
+        <meta name="msvalidate.01" content="CAE2B85CC2AA097D750003ECA98D55AA" />
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
