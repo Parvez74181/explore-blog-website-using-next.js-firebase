@@ -86,6 +86,26 @@ export default function Editor({ setDescription }) {
     });
   }, [format]);
 
+  // insertTable
+  const insertTable = useCallback(() => {
+    const rows = prompt("Enter the number of rows:");
+    const columns = prompt("Enter the number of columns:");
+
+    if (rows && columns) {
+      let tableHTML = "<table class='w-full text-left text-gray-500'>";
+      for (let i = 0; i < rows; i++) {
+        tableHTML += "<tr>";
+        for (let j = 0; j < columns; j++) {
+          tableHTML += "<td contenteditable='true' class='px-6 py-4'></td>";
+        }
+        tableHTML += "</tr>";
+      }
+      tableHTML += "</table>";
+
+      format("insertHTML", tableHTML);
+    }
+  }, [format]);
+
   // table of content
   const tableOfContent = useCallback(() => {
     const textEditor = document.querySelector(".text-box");
@@ -159,6 +179,13 @@ export default function Editor({ setDescription }) {
               format("underline");
             }}
           ></button>
+
+          <button
+            title="insert table"
+            className="fa-solid fa-table cursor-pointer border border-gray-700 p-2 px-4 rounded-md w-12 flex justify-center items-center bg-white"
+            onClick={insertTable}
+          ></button>
+
           <button
             title="link"
             className="fa-solid fa-link cursor-pointer border border-gray-700  p-2 px-4 rounded-md w-12 flex justify-center items-center bg-white "

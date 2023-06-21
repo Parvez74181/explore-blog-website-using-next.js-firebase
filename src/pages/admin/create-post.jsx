@@ -63,6 +63,7 @@ export default function CreatePost() {
             icon: "https://i.postimg.cc/JG0Kc57j/favicon.png",
           });
       });
+      
 
       // after 3s reload the page
       setTimeout(() => {

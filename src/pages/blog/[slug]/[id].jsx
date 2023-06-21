@@ -33,31 +33,21 @@ export default function Content({ data }) {
     });
 
     // to add blank target
-    let links = document.querySelectorAll("#desc-full a");
-    links.forEach((link) => {
+    let descFullLinks = document.querySelectorAll("#desc-full a");
+    descFullLinks.forEach((link) => {
       if (link.parentNode.parentNode.nodeName === "UL") return; // don't need to add blank to the table-of-content of ul tag
-
       link.target = "_blank";
     });
+
+    // Scroll to the heading when a link is clicked
+    // i did this cause when i submit my blog to server, the table of content takes me here:https://www.10mblogs.xyz/admin/create-post#heading1
+
+    const links = document.querySelectorAll("#table-of-content a");
+    links.forEach((link) => {
+      const targetHeadingId = link.getAttribute("href").split("#")[1];
+      link.href = `#${targetHeadingId}`;
+    });
   }, [data, post]);
-
-  async function shareContent() {
-    const shareData = {
-      title: post?.data?.postData?.title,
-      text: post?.data?.postData?.metaDescription,
-      url: location.href,
-    };
-
-    if (navigator.share) await navigator.share(shareData);
-    else {
-      await navigator.clipboard.writeText(location.href);
-      swal({
-        title: "success",
-        text: "Text coppied!",
-        icon: "success",
-      });
-    }
-  }
 
   // search handler
   const searchHandler = (e) => {
@@ -72,56 +62,6 @@ export default function Content({ data }) {
       if (searchInput) router.push(`/blog/search/${searchInput}`);
     }
   };
-
-  // Share link for Facebook
-  function createFacebookShareLink(url) {
-    window.open(
-      `https://www.facebook.com/share.php?u=${encodeURIComponent(url)}`,
-      "_blank"
-    );
-  }
-
-  // Share link for Instagram
-  function createInstagramShareLink(url, caption) {
-    window.open(
-      `https://www.instagram.com/share?url=${encodeURIComponent(
-        url
-      )}&caption=${encodeURIComponent(caption)}`,
-      "_blank"
-    );
-  }
-
-  // Share link for Twitter
-  function createTwitterShareLink(url, text, hashtags) {
-    window.open(
-      `http://twitter.com/share?&url=${encodeURIComponent(
-        url
-      )}&text=${text}&hashtags=${encodeURIComponent(hashtags)}`,
-      "_blank"
-    );
-  }
-
-  // Share link for Pinterest
-  function createPinterestShareLink(url, description) {
-    window.open(
-      `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(
-        url
-      )}&description=${encodeURIComponent(description)}`,
-      "_blank"
-    );
-  }
-
-  // Share link for email
-  function createEmailShareLink(subject, body) {
-    window.open(
-      `mailto:?subject=${encodeURIComponent(
-        subject
-      )}&body=Hey, I found this article on the web! 😍🤩:  ${encodeURIComponent(
-        body
-      )}`,
-      "_blank"
-    );
-  }
 
   return (
     <>
