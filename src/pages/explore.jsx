@@ -177,7 +177,7 @@ export default function Explore({ initialBlogs }) {
 
           {/* blogs */}
           <InfiniteScroll
-            dataLength={postData.length}
+            dataLength={postData?.length}
             next={loadMoreBlogs}
             hasMore={currentLastVisible !== null}
             loader={
