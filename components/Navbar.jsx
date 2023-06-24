@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import styles from "../src/styles/Navbar.module.scss";
-import { collection, onSnapshot } from "firebase/firestore";
-import { db } from "../utils/firebaseConfig";
+
 import { useRouter } from "next/router";
+import axios from "axios";
 
 const Navbar = () => {
   const [categories, setCategories] = useState([]);
@@ -38,20 +37,11 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    onSnapshot(
-      collection(db, "categories"),
-      (querySnapshot) => {
-        let list = [];
-        querySnapshot?.forEach((doc) => {
-          let data = doc.data();
-          list.push({ id: doc.id, name: data?.name });
-        });
-        setCategories(list);
-      },
-      (error) => {
-        console.log("Error fetching categories:", error);
-      }
-    );
+    const getCategories = async () => {
+      let res = await axios("/api/getCategories");
+      setCategories(res.data);
+    };
+    getCategories();
   }, []);
 
   const searchHandler = (e) => {
@@ -123,7 +113,7 @@ const Navbar = () => {
               <input
                 type="search"
                 id={styles["search-navbar"]}
-                className="block w-full p-2 pl-10 text-sm  border rounded-lg focus:ring-blue-500 focus:border-blue-500 font-normal border-gray-700 placeholder-gray-600 tracking-wider"
+                className="block w-full p-2 pl-10 border rounded-lg   font-normal border-gray-700 placeholder-gray-600 tracking-wider outline-none"
                 onKeyUp={searchHandler}
                 placeholder="Search..."
               />
@@ -228,15 +218,15 @@ const Navbar = () => {
                   <ul style={{ maxHeight: "300px", overflowY: "auto" }}>
                     {categories?.map((category) => {
                       return (
-                        <li id={category.id} key={category.id}>
+                        <li id={category?.id} key={category?.id}>
                           <Link
-                            href={`/blog/category/${category.name}`}
+                            href={`/blog/category/${category?.name}`}
                             className="hover:bg-gray-200 rounded block py-2 pl-3 pr-4 tracking-wide"
                             onClick={() => {
                               closeNavbar();
                             }}
                           >
-                            {category.name}
+                            {category?.name}
                           </Link>
                         </li>
                       );

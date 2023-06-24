@@ -92,7 +92,7 @@ export default function Editor({ setDescription }) {
     const columns = prompt("Enter the number of columns:");
 
     if (rows && columns) {
-      let tableHTML = "<table class='w-full text-left text-gray-500'>";
+      let tableHTML = "<table class='w-full text-left text-gray-500 p-3'>";
       for (let i = 0; i < rows; i++) {
         tableHTML += "<tr>";
         for (let j = 0; j < columns; j++) {
@@ -369,6 +369,7 @@ export default function Editor({ setDescription }) {
           id="desc"
           className="mt-5 w-full h-20 text-editor-output p-3 bg-transparent border border-gray-600 resize "
           value={textEditor}
+          readOnly
         ></textarea>
       </div>
     </>

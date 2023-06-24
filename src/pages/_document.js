@@ -1,6 +1,5 @@
 import { Html, Head, Main, NextScript } from "next/document";
 import { breadcrumbListJsonLd } from "../../utils/breadcrumbListJsonLd ";
-import { recipeJsonLd } from "../../utils/recipeJsonLd";
 
 export default function Document() {
   return (
@@ -40,13 +39,6 @@ export default function Document() {
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(breadcrumbListJsonLd),
-          }}
-        ></script>
-
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(recipeJsonLd),
           }}
         ></script>
       </Head>

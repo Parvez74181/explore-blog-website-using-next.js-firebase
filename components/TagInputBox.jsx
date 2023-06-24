@@ -19,7 +19,7 @@ function TagInputBox({ setTags }) {
   useEffect(() => {
     setTags((prevData) => ({
       ...prevData,
-      tag: tags,
+      tags,
     }));
   }, [tags, setTags]);
 

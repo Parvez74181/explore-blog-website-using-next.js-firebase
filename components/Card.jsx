@@ -1,14 +1,12 @@
 import styles from "../src/styles/Cards.module.scss";
 import Link from "next/link";
 import Image from "next/image";
-import parse from "html-react-parser";
+import { useRouter } from "next/router";
 
 export default function Card({ postData }) {
-  const { thumbnail, title, slug, category } = postData?.data?.postData;
-  const { timeStamp } = postData?.data;
-  const { id } = postData;
+  const { thumbnail, title, slug, category, id, createdAt } = postData;
 
-  const date = new Date(timeStamp);
+  const date = new Date(createdAt);
   let day = date.getDate();
   let months = date.getMonth();
   let year = date.getFullYear();

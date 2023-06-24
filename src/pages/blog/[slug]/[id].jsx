@@ -2,35 +2,19 @@ import styles from "../../../styles/Cards.module.scss";
 import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
-import {
-  doc,
-  getDoc,
-  collection,
-  onSnapshot,
-  getDocs,
-} from "firebase/firestore";
-import { db } from "../../../../utils/firebaseConfig";
 import { useEffect, useState } from "react";
 import parse from "html-react-parser";
 import { useRouter } from "next/router";
-import swal from "sweetalert";
+import axios from "axios";
 
-export default function Content({ data }) {
+export default function Content({ blogs, categories }) {
   const [post, setPost] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const [allCategories, setCategories] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
-    setPost(data[0]);
-
-    onSnapshot(collection(db, "categories"), (querySnapshot) => {
-      let list = [];
-      querySnapshot?.forEach((doc) => {
-        let data = doc.data();
-        list.push({ id: doc.id, name: data?.name });
-      });
-      setCategories(list);
-    });
+    setPost(blogs);
+    setCategories(categories);
 
     // to add blank target
     let descFullLinks = document.querySelectorAll("#desc-full a");
@@ -47,7 +31,7 @@ export default function Content({ data }) {
       const targetHeadingId = link.getAttribute("href").split("#")[1];
       link.href = `#${targetHeadingId}`;
     });
-  }, [data, post]);
+  }, []);
 
   // search handler
   const searchHandler = (e) => {
@@ -66,13 +50,10 @@ export default function Content({ data }) {
   return (
     <>
       <Head>
-        <meta
-          name="description"
-          content={`${post?.data?.postData?.metaDescription}`}
-        />
+        <meta name="description" content={post?.metaDescription} />
         <meta
           name="keywords"
-          content={post?.data?.postData?.tag?.map((tag) => {
+          content={post?.tag?.map((tag) => {
             return tag;
           })}
         />
@@ -80,41 +61,29 @@ export default function Content({ data }) {
         <link rel="canonical" href="https://www.10mblogs.xyz" />
 
         {/* <!-- Open Graph tags --> */}
-        <meta
-          property="og:title"
-          content="Discover a World of Diverse Insights | 10mBlogs"
-        />
-        <meta
-          property="og:description"
-          content="Welcome to 10mBlogs, a place where I share my passion for a variety of topics, including food, cooking, reviews, DIY projects, and more. Through this blog, I aim to provide you with valuable insights, inspiration, and practical tips to enhance your everyday life."
-        />
+        <meta property="og:title" content={post?.metaTitle} />
+        <meta property="og:description" content={post?.metaDescription} />
         <meta
           property="og:image"
           content="https://i.postimg.cc/66HmCcBH/Screenshot-2023-06-19-111850.png"
         />
-        <meta property="og:url" content="https://www.10mblogs.xyz" />
+        <meta
+          property="og:url"
+          content={`https://www.10mblogs.xyz/${post?.slug}/${post?.id}`}
+        />
 
         {/* <!-- Twitter Card tags --> */}
-        <meta
-          name="twitter:card"
-          content="Discover a World of Diverse Insights | 10mBlogs"
-        />
-        <meta
-          name="twitter:title"
-          content="Discover a World of Diverse Insights | 10mBlogs"
-        />
-        <meta
-          name="twitter:description"
-          content="Welcome to 10mBlogs, a place where I share my passion for a variety of topics, including food, cooking, reviews, DIY projects, and more. Through this blog, I aim to provide you with valuable insights, inspiration, and practical tips to enhance your everyday life."
-        />
+        <meta name="twitter:card" content={post?.metaTitle} />
+        <meta name="twitter:title" content={post?.title} />
+        <meta name="twitter:description" content={post?.metaDescription} />
         <meta
           name="twitter:image"
           content="https://i.postimg.cc/66HmCcBH/Screenshot-2023-06-19-111850.png"
         />
 
         <title>
-          {post?.data?.postData?.title
-            ? `${post?.data?.postData?.title} | 10mBlogs | Discover a World of Diverse Insights`
+          {post?.title
+            ? `${post?.title} | Discover a World of Diverse Insights | 10mBlogs`
             : "Discover a World of Diverse Insights | 10mBlogs"}
         </title>
       </Head>
@@ -139,25 +108,25 @@ export default function Content({ data }) {
             <div className="relative" style={{ width: "100%" }}>
               {/* category */}
               <div className={`${styles["category"]} my-5  tracking-widest`}>
-                <Link href={`/blog/category/${post?.data?.postData?.category}`}>
-                  {post?.data?.postData?.category}
+                <Link href={`/blog/category/${post?.category}`}>
+                  {post?.category}
                 </Link>
               </div>
 
               {/* title */}
               <h3 className={`my-6 text-4xl font-bold tracking-wider `}>
-                {post?.data?.postData?.title}
+                {post?.title}
               </h3>
 
               {/* image */}
 
               <Image
                 src={
-                  post?.data?.postData?.thumbnail.includes("drive.google.com")
+                  post?.thumbnail?.includes("drive.google.com")
                     ? `https://drive.google.com/uc?export=view&id=${
-                        post?.data?.postData?.thumbnail.split("/")[5]
+                        post?.thumbnail?.split("/")[5]
                       }`
-                    : post?.data?.postData?.thumbnail
+                    : post?.thumbnail
                 }
                 className="rounded-md md:max-h-[500px] object-contain"
                 width={558}
@@ -165,8 +134,8 @@ export default function Content({ data }) {
                 style={{
                   width: "100%",
                 }}
-                alt={post?.data?.postData?.slug}
-                priority={false}
+                alt={post?.slug}
+                priority={true}
               ></Image>
 
               {/* share options */}
@@ -178,7 +147,7 @@ export default function Content({ data }) {
                 id="desc-full"
                 className={`${styles["desc-full"]} my-6 font-normal  tracking-wider leading-8 text-black `}
               >
-                {parse(`${post?.data?.postData?.description}`)}
+                {parse(`${post?.description}`)}
               </div>
             </div>
 
@@ -239,7 +208,7 @@ export default function Content({ data }) {
                 Categories
               </h5>
               <ul className={`${styles["categories"]} mt-5`}>
-                {categories?.map((category) => {
+                {allCategories?.map((category) => {
                   return (
                     <li
                       id={category.id}
@@ -264,22 +233,54 @@ export default function Content({ data }) {
   );
 }
 
-export async function getServerSideProps(context) {
-  const { id } = context.query;
-  const blog = []; //
+export async function getStaticPaths() {
+  const baseUrl = process.env.URL_ORIGIN;
 
-  // Fetch data from Firebase
-  const docSnap = await getDoc(doc(db, "blogs", id));
-  const data = docSnap.data();
+  // Fetch the list of slugs and ids from your API
+  const res = await fetch(`${baseUrl}/api/getSlugsAndIdsFromDatabase`);
+  const data = await res.json();
 
-  // serializing the data
-  const formattedData = {
-    ...data,
-    timeStamp: data.timeStamp.toDate().toISOString(),
+  // Generate an array of paths
+  const paths = data.map(({ slug, id }) => ({
+    params: { slug, id: id.toString() },
+  }));
+
+  return {
+    paths,
+    fallback: "blocking",
   };
-  // add data to the list variable
-  blog.unshift({ id: docSnap.id, data: formattedData });
+}
 
-  // Pass data to the page via props
-  return { props: { data: blog } };
+export async function getStaticProps({ params }) {
+  const baseUrl = process.env.URL_ORIGIN;
+  const { slug, id } = params;
+
+  try {
+    const res = await fetch(
+      `${baseUrl}/api/getBlogByIdAndSlug?slug=${slug}&id=${id}`
+    );
+
+    // console.log(res);
+    if (!res.ok)
+      throw new Error(`Request failed with status code ${res.status}`);
+
+    const { blogs, categories } = await res.json();
+    return {
+      props: {
+        blogs,
+        categories,
+      },
+      revalidate: 60,
+    };
+  } catch (error) {
+    console.error(error);
+
+    return {
+      props: {
+        blogs: null,
+        categories: null,
+      },
+      revalidate: 60,
+    };
+  }
 }

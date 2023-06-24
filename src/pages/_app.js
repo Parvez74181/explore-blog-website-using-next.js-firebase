@@ -55,9 +55,10 @@ export default function App({ Component, pageProps }) {
         onLoaderFinished={() => setProgress(0)}
       />
       {!loading && (
-        <Component {...pageProps}>
+        <>
+          <Component {...pageProps} />
           <Analytics />
-        </Component>
+        </>
       )}
       {!loading && <Footer />}
     </>

@@ -1,13 +1,12 @@
 import styles from "../../styles/Admin-Panel.module.scss";
 import Link from "next/link";
-import { collection, getDoc } from "firebase/firestore";
-import { db } from "../../../utils/firebaseConfig";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import swal from "sweetalert";
 
-export default function Admin() {
+export default function Admin({ totalBlogsCount }) {
   const [adminAccessToken, setAdminAccessToken] = useState(false);
+  const [totalBlogs, setTotalBlogs] = useState(null);
 
   const router = useRouter();
   const { icon, title, text } = router.query;
@@ -26,7 +25,10 @@ export default function Admin() {
         body: JSON.stringify({ accessToken }),
       });
 
-      if (res.ok) setAdminAccessToken(true);
+      if (res.ok) {
+        setAdminAccessToken(true);
+        setTotalBlogs(totalBlogsCount);
+      }
       // if accessToken is verifyed that means res is ok, make adminAccessToken is true so admin can see the admin panel
       else if (!res.ok) router.push("/"); // if accessToken isn't verifyed then send the user to home page
     };
@@ -162,7 +164,9 @@ export default function Admin() {
 
               {/* middle */}
               <div className={`${styles["middle"]}`}>
-                <span className=" text-2xl">100</span>
+                <span className=" text-2xl">
+                  {totalBlogs ? totalBlogs : "Loading..."}
+                </span>
               </div>
 
               {/* bottom */}
@@ -243,4 +247,34 @@ export default function Admin() {
       )}
     </>
   );
+}
+
+export async function getStaticProps() {
+  const baseUrl = process.env.URL_ORIGIN;
+
+  try {
+    const res = await fetch(`${baseUrl}/api/getBlogsCount`);
+
+    if (!res.ok) {
+      throw new Error(`Request failed with status code ${res.status}`);
+    }
+
+    const totalBlogsCount = await res.json();
+
+    return {
+      props: {
+        totalBlogsCount,
+      },
+      revalidate: 60,
+    };
+  } catch (error) {
+    console.error(error);
+
+    return {
+      props: {
+        totalBlogsCount: null,
+      },
+      revalidate: 60,
+    };
+  }
 }

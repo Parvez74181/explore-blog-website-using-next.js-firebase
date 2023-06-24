@@ -1,119 +1,48 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Card from "../../../../components/Card";
 import Lottie from "lottie-react";
 import animationData from "../../../../public/notFound.json";
-import {
-  collection,
-  query,
-  orderBy,
-  startAfter,
-  limit,
-  getDocs,
-  getDoc,
-  doc,
-  where,
-  or,
-} from "firebase/firestore";
-import { db } from "../../../../utils/firebaseConfig";
 import { useRouter } from "next/router";
-
 import Link from "next/link";
 import InfiniteScroll from "react-infinite-scroll-component";
-import styles from "../../../styles/Search.module.scss";
 import Head from "next/head";
 import Button from "../../../../components/Button";
+import axios from "axios";
 
 // to get more blogs by InfiniteScroll component
-async function getBlogs(lastVisible = null, search = null) {
-  const blogCollection = collection(db, "blogs");
-  const limitItem = 12; // how many item do i want to show
-  search = search.toLowerCase();
-
-  // if lastVisible is not null then add startAfter to the query
-  const queryCursor = lastVisible
-    ? query(
-        blogCollection,
-        or(
-          where("postData.tag", "array-contains", search),
-          where("postData.category", "==", search),
-          where("postData.title", "==", search)
-        ),
-        orderBy("timeStamp", "desc"),
-        startAfter(lastVisible),
-        limit(limitItem)
-      )
-    : query(
-        blogCollection,
-        or(
-          where("postData.tag", "array-contains", search),
-          where("postData.category", "==", search),
-          where("postData.title", "==", search)
-        ),
-        orderBy("timeStamp", "desc"),
-        limit(limitItem)
-      );
-
-  const documentSnapshots = await getDocs(queryCursor); // get the documents from the firebase
-
-  // serialize the data and store them into list variable
-  const list = documentSnapshots?.docs?.map((doc) => {
-    const data = doc?.data();
-    const formattedData = {
-      ...data,
-      timeStamp: data?.timeStamp?.toDate().toISOString(),
-    };
-
-    return { id: doc?.id, data: formattedData };
-  });
-
-  const lastVisibleDoc =
-    documentSnapshots?.docs[documentSnapshots?.docs?.length - 1]; // Get the last visible document
-
-  const isLastDocument =
-    documentSnapshots?.empty || documentSnapshots?.docs.length < limitItem; // check is this the last document or not
-
-  return { list, lastVisible: isLastDocument ? null : lastVisibleDoc };
+async function getBlogs(search, page) {
+  const pageSize = 12; // Number of items to load per page
+  try {
+    let res = await axios(
+      `/api/getBlogsBySearch?search=${search}&page=${page}&pageSize=${pageSize}`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    swal({
+      title: "Error",
+      text: "Something Wrong! Please try again later!",
+      icon: "error",
+    });
+  }
 }
-
-export default function getPostsBySearch({ data, lastVisibleId }) {
+export default function getPostsBySearch({ blogs }) {
   const router = useRouter();
   const { search } = router.query;
   const [postData, setPostData] = useState([]);
-
+  const page = useRef(1);
   const [currentLastVisible, setCurrentLastVisible] = useState(null);
 
   useEffect(() => {
-    setPostData(data);
-
-    // get the lastVisible blog from the getServerSideProps lastVisibleId and set them to currentLastVisible
-    const getLastVisibleBlogById = async () => {
-      let lastVisibleRef = await getDoc(doc(db, "blogs", lastVisibleId));
-      setCurrentLastVisible(lastVisibleRef);
-    };
-    if (lastVisibleId !== null) getLastVisibleBlogById();
-  }, [data]);
-
+    setPostData(blogs);
+  }, []);
   // to load more blogs when user approach to the bottom of content
   const loadMoreBlogs = async () => {
-    // if currentLastVisible is not null only then call the getBlogs funtion
-    // cause if there is no more data then do not need to call the getBlogs function
-    if (currentLastVisible !== null) {
-      const { list, lastVisible: newLastVisible } = await getBlogs(
-        currentLastVisible,
-        search
-      );
+    page.current = page.current + 1; // increament the page number
+    const blogs = await getBlogs(search, page.current);
+    setPostData((prevData) => [...prevData, ...blogs]);
 
-      // setPostData((prevData) => [...prevData, ...list]);
-      setPostData((prevData) => prevData.concat(list));
-
-      // if newLastVisible is not null then set the currentLastVisible to newLastVisible else setCurrentLastVisible null
-      // cause if currentLastVisible is not set null when all data has been fethced, then the getBlogs function will be call everytime  when user approach to the bottom of content and this will add the same data to the postData which is not good
-      if (newLastVisible !== null) {
-        setCurrentLastVisible(newLastVisible);
-      } else {
-        setCurrentLastVisible(null);
-      }
-    }
+    if (blogs.length === 0) setCurrentLastVisible(null);
   };
 
   return (
@@ -129,7 +58,9 @@ export default function getPostsBySearch({ data, lastVisibleId }) {
         />
 
         <title>
-          {search} | 10mBlogs | Discover a World of Diverse Insights
+          {postData
+            ? `${search} | Discover a World of Diverse Insights | 10mBlogs`
+            : "Discover a World of Diverse Insights | 10mBlogs"}
         </title>
       </Head>
 
@@ -137,7 +68,7 @@ export default function getPostsBySearch({ data, lastVisibleId }) {
         className={`min-h-screen mx-auto mb-10 `}
         style={{ width: "80%" }}
       >
-        {postData.length > 0 ? (
+        {postData?.length > 0 ? (
           <>
             <p
               className={`mt-10 text-gray-500 text-md text-center `}
@@ -233,13 +164,43 @@ export default function getPostsBySearch({ data, lastVisibleId }) {
   );
 }
 
-export async function getServerSideProps(context) {
-  const { search } = context.query;
+export async function getStaticPaths() {
+  // Return an empty array of paths
+  // By setting the paths array to an empty array, Next.js will generate the search pages dynamically based on user input. The fallback: "blocking" option ensures that if a path is not pre-rendered, it will be generated on the server at request time.
 
-  const { list, lastVisible } = await getBlogs(null, search);
-
-  // Pass data to the page via props
   return {
-    props: { data: list, lastVisibleId: lastVisible ? lastVisible.id : null },
+    paths: [],
+    fallback: "blocking",
   };
+}
+export async function getStaticProps({ params }) {
+  const baseUrl = process.env.URL_ORIGIN;
+  const { search } = params;
+
+  try {
+    const res = await fetch(
+      `${baseUrl}/api/getBlogsBySearch?search=${search}&page=1&pageSize=12`
+    );
+
+    if (!res.ok)
+      throw new Error(`Request failed with status code ${res.status}`);
+
+    const blogs = await res.json();
+
+    return {
+      props: {
+        blogs,
+      },
+      revalidate: 60,
+    };
+  } catch (error) {
+    console.error(error);
+
+    return {
+      props: {
+        blogs: null,
+      },
+      revalidate: 60,
+    };
+  }
 }

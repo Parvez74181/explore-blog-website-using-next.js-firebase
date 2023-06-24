@@ -2,6 +2,7 @@ import styles from "../src/styles/Create-Post.module.scss";
 import { useState, useEffect } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../utils/firebaseConfig";
+import axios from "axios";
 
 export default function CategorieInput({ setCategory }) {
   const [selectedCategory, setSelectedCategory] = useState();
@@ -13,14 +14,12 @@ export default function CategorieInput({ setCategory }) {
   };
 
   useEffect(() => {
-    onSnapshot(collection(db, "categories"), (querySnapshot) => {
-      let list = [];
-      querySnapshot?.forEach((doc) => {
-        let data = doc.data();
-        list.push({ id: doc.id, name: data?.name });
-      });
-      setCategories(list);
-    });
+    const getCategories = async () => {
+      let { data } = await axios("/api/getCategories");
+      setCategories(data);
+    };
+
+    getCategories();
   }, []);
 
   useEffect(() => {
