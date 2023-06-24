@@ -215,7 +215,7 @@ export default function allPosts({ initialBlogs }) {
 }
 
 export async function getStaticProps() {
-  if (process.env.MOD === "production") {
+  if (process.env.MODE === "production") {
     const baseUrl = process.env.URL_ORIGIN;
 
     try {
