@@ -176,36 +176,47 @@ export default function getPostsByCategory({ blogs }) {
 }
 
 export async function getStaticPaths() {
-  const baseUrl = process.env.URL_ORIGIN;
+  // Check if the server is running
+  if (process.env.MODE === "production") {
+    const baseUrl = process.env.URL_ORIGIN;
+    // Fetch the list of slugs and ids from your API
+    const res = await fetch(`${baseUrl}/api/getCategoriesNameAndId`);
+    const data = await res.json();
 
-  // Fetch the list of slugs and ids from your API
-  const res = await fetch(`${baseUrl}/api/getCategoriesNameAndId`);
-  const data = await res.json();
+    // Generate an array of paths
+    const paths = data.map(({ name, id }) => ({
+      params: { category: name, id: id.toString() },
+    }));
 
-  // Generate an array of paths
-  const paths = data.map(({ name, id }) => ({
-    params: { category: name, id: id.toString() },
-  }));
+    return {
+      paths,
+      fallback: "blocking",
+    };
+  }
 
   return {
-    paths,
+    paths: [{ params: { category: 'buddy' } }],
     fallback: "blocking",
   };
 }
 
 export async function getStaticProps({ params }) {
-  const baseUrl = process.env.URL_ORIGIN;
   const { category } = params;
+  let blogs = null;
 
   try {
-    const res = await fetch(
-      `${baseUrl}/api/getBlogsByCategory?category=${category}&page=1&pageSize=12`
-    );
+    // Check if the server is running
+    if (process.env.MODE === "production") {
+      const baseUrl = process.env.URL_ORIGIN;
+      const res = await fetch(
+        `${baseUrl}/api/getBlogsByCategory?category=${category}&page=1&pageSize=12`
+      );
 
-    if (!res.ok)
-      throw new Error(`Request failed with status code ${res.status}`);
+      if (!res.ok)
+        throw new Error(`Request failed with status code ${res.status}`);
 
-    const blogs = await res.json();
+      blogs = await res.json();
+    }
 
     return {
       props: {

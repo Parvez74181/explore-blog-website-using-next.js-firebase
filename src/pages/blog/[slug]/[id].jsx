@@ -234,53 +234,74 @@ export default function Content({ blogs, categories }) {
 }
 
 export async function getStaticPaths() {
-  const baseUrl = process.env.URL_ORIGIN;
+  // Check if the server is running in production
+  if (process.env.MODE === "production") {
+    const baseUrl = process.env.URL_ORIGIN;
+    try {
+      // Fetch the list of slugs and ids from your API
+      const res = await fetch(`${baseUrl}/api/getSlugsAndIdsFromDatabase`);
+      const data = await res.json();
 
-  // Fetch the list of slugs and ids from your API
-  const res = await fetch(`${baseUrl}/api/getSlugsAndIdsFromDatabase`);
-  const data = await res.json();
+      // Generate an array of paths
+      const paths = data.map(({ slug, id }) => ({
+        params: { slug, id: id.toString() },
+      }));
 
-  // Generate an array of paths
-  const paths = data.map(({ slug, id }) => ({
-    params: { slug, id: id.toString() },
-  }));
+      return {
+        paths,
+        fallback: "blocking",
+      };
+    } catch (error) {
+      console.error("Failed to fetch slugs and ids:", error);
+    }
+  }
 
+  // Return default paths in non-production environments or on error
   return {
-    paths,
+    paths: [{ params: { slug: "asdf", id: "2" } }],
     fallback: "blocking",
   };
 }
 
 export async function getStaticProps({ params }) {
-  const baseUrl = process.env.URL_ORIGIN;
   const { slug, id } = params;
 
   try {
-    const res = await fetch(
-      `${baseUrl}/api/getBlogByIdAndSlug?slug=${slug}&id=${id}`
-    );
+    // Check if the server is running in production
+    if (process.env.MODE === "production") {
+      const baseUrl = process.env.URL_ORIGIN;
+      try {
+        const res = await fetch(
+          `${baseUrl}/api/getBlogByIdAndSlug?slug=${slug}&id=${id}`
+        );
 
-    // console.log(res);
-    if (!res.ok)
-      throw new Error(`Request failed with status code ${res.status}`);
+        if (!res.ok) {
+          throw new Error(`Request failed with status code ${res.status}`);
+        }
 
-    const { blogs, categories } = await res.json();
-    return {
-      props: {
-        blogs,
-        categories,
-      },
-      revalidate: 60,
-    };
+        const { blogs, categories } = await res.json();
+
+        return {
+          props: {
+            blogs,
+            categories,
+          },
+          revalidate: 60,
+        };
+      } catch (error) {
+        console.error("Failed to fetch blog by ID and slug:", error);
+      }
+    }
   } catch (error) {
-    console.error(error);
-
-    return {
-      props: {
-        blogs: null,
-        categories: null,
-      },
-      revalidate: 60,
-    };
+    console.error("Error:", error);
   }
+
+  // Return default props in non-production environments or on error
+  return {
+    props: {
+      blogs: null,
+      categories: null,
+    },
+    revalidate: 60,
+  };
 }

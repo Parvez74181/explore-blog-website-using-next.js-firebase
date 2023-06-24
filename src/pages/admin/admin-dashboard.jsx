@@ -3,8 +3,9 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import swal from "sweetalert";
+import axios from "axios";
 
-export default function Admin({ totalBlogsCount }) {
+export default function Admin() {
   const [adminAccessToken, setAdminAccessToken] = useState(false);
   const [totalBlogs, setTotalBlogs] = useState(null);
 
@@ -27,7 +28,8 @@ export default function Admin({ totalBlogsCount }) {
 
       if (res.ok) {
         setAdminAccessToken(true);
-        setTotalBlogs(totalBlogsCount);
+        let { data } = await axios(`/api/getBlogsCount`);
+        setTotalBlogs(data);
       }
       // if accessToken is verifyed that means res is ok, make adminAccessToken is true so admin can see the admin panel
       else if (!res.ok) router.push("/"); // if accessToken isn't verifyed then send the user to home page
@@ -247,34 +249,4 @@ export default function Admin({ totalBlogsCount }) {
       )}
     </>
   );
-}
-
-export async function getStaticProps() {
-  const baseUrl = process.env.URL_ORIGIN;
-
-  try {
-    const res = await fetch(`${baseUrl}/api/getBlogsCount`);
-
-    if (!res.ok) {
-      throw new Error(`Request failed with status code ${res.status}`);
-    }
-
-    const totalBlogsCount = await res.json();
-
-    return {
-      props: {
-        totalBlogsCount,
-      },
-      revalidate: 60,
-    };
-  } catch (error) {
-    console.error(error);
-
-    return {
-      props: {
-        totalBlogsCount: null,
-      },
-      revalidate: 60,
-    };
-  }
 }

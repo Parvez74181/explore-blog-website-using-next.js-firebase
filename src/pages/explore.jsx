@@ -1,59 +1,20 @@
 import Card from "../../components/Card";
 import styles from "../styles/Explore.module.scss";
-import {
-  collection,
-  query,
-  orderBy,
-  startAfter,
-  limit,
-  getDocs,
-  getDoc,
-  doc,
-} from "firebase/firestore";
-import { db } from "../../utils/firebaseConfig";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import InfiniteScroll from "react-infinite-scroll-component";
 import swal from "sweetalert";
 import Lottie from "lottie-react";
 import animationData from "../../public/explore-bg.json";
 import Head from "next/head";
+import axios from "axios";
 
 // to get more blogs by InfiniteScroll component
-async function getBlogs(lastVisible = null) {
-  const blogCollection = collection(db, "blogs");
-  const limitItem = 12; // how many item do i want to show
-
-  // if lastVisible is not null then add startAfter to the query
-  const queryCursor = lastVisible
-    ? query(
-        blogCollection,
-        orderBy("timeStamp", "desc"),
-        startAfter(lastVisible),
-        limit(limitItem)
-      )
-    : query(blogCollection, orderBy("timeStamp", "desc"), limit(limitItem));
-
+async function getBlogs(page) {
+  const pageSize = 12; // Number of items to load per page
   try {
-    const documentSnapshots = await getDocs(queryCursor); // get the documents from the firebase
-    // serialize the data and store them into list variable
-    const list = documentSnapshots?.docs?.map((doc) => {
-      const data = doc?.data();
-      const formattedData = {
-        ...data,
-        timeStamp: data?.timeStamp?.toDate().toISOString(),
-      };
-
-      return { id: doc?.id, data: formattedData };
-    });
-
-    const lastVisibleDoc =
-      documentSnapshots?.docs[documentSnapshots?.docs?.length - 1]; // Get the last visible document
-
-    const isLastDocument =
-      documentSnapshots?.empty || documentSnapshots?.docs.length < limitItem; // check is this the last document or not
-
-    return { list, lastVisible: isLastDocument ? null : lastVisibleDoc };
+    let res = await axios(`/api/getBlogs?page=${page}&pageSize=${pageSize}`);
+    return res.data;
   } catch (error) {
     swal({
       title: "Error",
@@ -63,21 +24,15 @@ async function getBlogs(lastVisible = null) {
   }
 }
 
-export default function Explore({ data, lastVisibleId }) {
+export default function Explore({ initialBlogs }) {
   const [postData, setPostData] = useState([]);
   const [currentLastVisible, setCurrentLastVisible] = useState(null);
   const router = useRouter();
+  const page = useRef(1);
 
   useEffect(() => {
-    setPostData(data);
-
-    // get the lastVisible blog from the getServerSideProps lastVisibleId and set them to currentLastVisible
-    const getLastVisibleBlogById = async () => {
-      let lastVisibleRef = await getDoc(doc(db, "blogs", lastVisibleId));
-      setCurrentLastVisible(lastVisibleRef);
-    };
-    if (lastVisibleId !== null) getLastVisibleBlogById();
-  }, [data]);
+    setPostData(initialBlogs);
+  }, [initialBlogs]);
 
   // search handler
   const searchHandler = (e) => {
@@ -92,27 +47,13 @@ export default function Explore({ data, lastVisibleId }) {
       if (searchInput) router.push(`/blog/search/${searchInput}`);
     }
   };
-
   // to load more blogs when user approach to the bottom of content
   const loadMoreBlogs = async () => {
-    // if currentLastVisible is not null only then call the getBlogs funtion
-    // cause if there is no more data then do not need to call the getBlogs function
-    if (currentLastVisible !== null) {
-      const { list, lastVisible: newLastVisible } = await getBlogs(
-        currentLastVisible
-      );
+    page.current = page.current + 1; // increament the page number
+    const blogs = await getBlogs(page.current);
+    setPostData((prevData) => [...prevData, ...blogs]);
 
-      // setPostData((prevData) => [...prevData, ...list]);
-      setPostData((prevData) => prevData.concat(list));
-
-      // if newLastVisible is not null then set the currentLastVisible to newLastVisible else setCurrentLastVisible null
-      // cause if currentLastVisible is not set null when all data has been fethced, then the getBlogs function will be call everytime  when user approach to the bottom of content and this will add the same data to the postData which is not good
-      if (newLastVisible !== null) {
-        setCurrentLastVisible(newLastVisible);
-      } else {
-        setCurrentLastVisible(null);
-      }
-    }
+    if (blogs.length === 0) setCurrentLastVisible(null);
   };
 
   return (
@@ -304,10 +245,42 @@ export default function Explore({ data, lastVisibleId }) {
   );
 }
 
-export async function getServerSideProps() {
-  const { list, lastVisible } = await getBlogs();
-  // Pass data to the page via props
-  return {
-    props: { data: list, lastVisibleId: lastVisible ? lastVisible.id : null },
-  };
+export async function getStaticProps() {
+  if (process.env.MOD === "production") {
+    const baseUrl = process.env.URL_ORIGIN;
+
+    try {
+      const res = await fetch(`${baseUrl}/api/getBlogs?page=1&pageSize=12`);
+
+      if (!res.ok) {
+        throw new Error(`Request failed with status code ${res.status}`);
+      }
+
+      const initialBlogs = await res.json();
+
+      return {
+        props: {
+          initialBlogs,
+        },
+        revalidate: 60,
+      };
+    } catch (error) {
+      console.error(error);
+
+      return {
+        props: {
+          initialBlogs: null,
+        },
+        revalidate: 60,
+      };
+    }
+  } else {
+    // Return default props for non-production environments
+    return {
+      props: {
+        initialBlogs: null,
+      },
+      revalidate: 60,
+    };
+  }
 }

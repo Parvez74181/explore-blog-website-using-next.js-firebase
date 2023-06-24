@@ -169,24 +169,26 @@ export async function getStaticPaths() {
   // By setting the paths array to an empty array, Next.js will generate the search pages dynamically based on user input. The fallback: "blocking" option ensures that if a path is not pre-rendered, it will be generated on the server at request time.
 
   return {
-    paths: [],
+    paths: [{ params: { search: "asdf" } }],
     fallback: "blocking",
   };
 }
 export async function getStaticProps({ params }) {
-  const baseUrl = process.env.URL_ORIGIN;
   const { search } = params;
-
+  let blogs = null;
   try {
-    const res = await fetch(
-      `${baseUrl}/api/getBlogsBySearch?search=${search}&page=1&pageSize=12`
-    );
+    // Check if the server is running
+    if (process.env.MODE === "production") {
+      const baseUrl = process.env.URL_ORIGIN;
+      const res = await fetch(
+        `${baseUrl}/api/getBlogsBySearch?search=${search}&page=1&pageSize=12`
+      );
 
-    if (!res.ok)
-      throw new Error(`Request failed with status code ${res.status}`);
+      if (!res.ok)
+        throw new Error(`Request failed with status code ${res.status}`);
 
-    const blogs = await res.json();
-
+      blogs = await res.json();
+    }
     return {
       props: {
         blogs,

@@ -59,7 +59,7 @@ export default function AddCategory() {
     }
   };
 
-  // after every time category is updateDoc, deleted, added, show the realtime database data by order 'timeStamp'
+  // get categories
   useEffect(() => {
     const getCategories = async () => {
       let res = await axios("/api/getCategories");

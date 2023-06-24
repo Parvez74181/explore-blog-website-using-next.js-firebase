@@ -237,28 +237,37 @@ export default function Home({ initialBlogs }) {
     </>
   );
 }
-
 export async function getStaticProps() {
-  const baseUrl = process.env.URL_ORIGIN;
+  if (process.env.MOD === "production") {
+    const baseUrl = process.env.URL_ORIGIN;
 
-  try {
-    const res = await fetch(`${baseUrl}/api/getBlogs?page=1&pageSize=12`);
+    try {
+      const res = await fetch(`${baseUrl}/api/getBlogs?page=1&pageSize=12`);
 
-    if (!res.ok) {
-      throw new Error(`Request failed with status code ${res.status}`);
+      if (!res.ok) {
+        throw new Error(`Request failed with status code ${res.status}`);
+      }
+
+      const initialBlogs = await res.json();
+
+      return {
+        props: {
+          initialBlogs,
+        },
+        revalidate: 60,
+      };
+    } catch (error) {
+      console.error(error);
+
+      return {
+        props: {
+          initialBlogs: null,
+        },
+        revalidate: 60,
+      };
     }
-
-    const initialBlogs = await res.json();
-
-    return {
-      props: {
-        initialBlogs,
-      },
-      revalidate: 60,
-    };
-  } catch (error) {
-    console.error(error);
-
+  } else {
+    // Return default props for non-production environments
     return {
       props: {
         initialBlogs: null,
