@@ -5,9 +5,10 @@ export default async function handler(req, res) {
   const parsedPage = parseInt(page);
   const parsedPageSize = parseInt(pageSize);
   try {
-    const totalCount = await prisma.blogs.count(); // Get the total count of categories
-
     const blogs = await prisma.blogs.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
       skip: (parsedPage - 1) * parsedPageSize, // Calculate the number of items to skip. ex: parsedPage is 2 then 2-1 = 1 and finallay parsedPageSize is show many items do I want to show, so 1*parsedPageSize = 1*12 = 12 to skip
       take: parsedPageSize, // Define the number of items to take per page
     });

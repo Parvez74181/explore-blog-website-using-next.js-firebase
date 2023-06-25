@@ -1,22 +1,10 @@
-import {
-  collection,
-  query,
-  orderBy,
-  startAfter,
-  limit,
-  getDocs,
-  getDoc,
-  deleteDoc,
-  doc,
-} from "firebase/firestore";
-import { db } from "../../../utils/firebaseConfig";
 import { useEffect, useState, useRef } from "react";
-import Loader from "../../../components/Loader";
 import InfiniteScroll from "react-infinite-scroll-component";
 import swal from "sweetalert";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import axios from "axios";
+import prisma from "../../../lib/prisma";
 
 // to get more blogs by InfiniteScroll component
 async function getBlogs(page) {
@@ -215,36 +203,23 @@ export default function allPosts({ initialBlogs }) {
 }
 
 export async function getStaticProps() {
-  if (process.env.MODE === "production") {
-    const baseUrl = process.env.URL_ORIGIN;
+  const page = 1;
+  const pageSize = 12;
+  try {
+    const initialBlogs = await prisma.blogs.findMany({
+      skip: (page - 1) * pageSize, // Calculate the number of items to skip. ex: page is 2 then 2-1 = 1 and finallay pageSize is show many items do I want to show, so 1*pageSize = 1*12 = 12 to skip
+      take: pageSize, // Define the number of items to take per page
+    });
 
-    try {
-      const res = await fetch(`${baseUrl}/api/getBlogs?page=1&pageSize=12`);
+    return {
+      props: {
+        initialBlogs: JSON.stringify(initialBlogs),
+      },
+      revalidate: 60,
+    };
+  } catch (error) {
+    console.error(error);
 
-      if (!res.ok) {
-        throw new Error(`Request failed with status code ${res.status}`);
-      }
-
-      const initialBlogs = await res.json();
-
-      return {
-        props: {
-          initialBlogs,
-        },
-        revalidate: 60,
-      };
-    } catch (error) {
-      console.error(error);
-
-      return {
-        props: {
-          initialBlogs: null,
-        },
-        revalidate: 60,
-      };
-    }
-  } else {
-    // Return default props for non-production environments
     return {
       props: {
         initialBlogs: null,

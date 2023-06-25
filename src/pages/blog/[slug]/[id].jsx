@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import parse from "html-react-parser";
 import { useRouter } from "next/router";
 import axios from "axios";
+import prisma from "../../../../lib/prisma";
 
 export default function Content({ blogs, categories }) {
   const [post, setPost] = useState([]);
@@ -13,8 +14,8 @@ export default function Content({ blogs, categories }) {
   const router = useRouter();
 
   useEffect(() => {
-    setPost(blogs);
-    setCategories(categories);
+    setPost(JSON.parse(blogs));
+    setCategories(JSON.parse(categories));
 
     // to add blank target
     let descFullLinks = document.querySelectorAll("#desc-full a");
@@ -234,68 +235,52 @@ export default function Content({ blogs, categories }) {
 }
 
 export async function getStaticPaths() {
-  // Check if the server is running in production
-  if (process.env.MODE === "production") {
-    const baseUrl = process.env.URL_ORIGIN;
-    try {
-      // Fetch the list of slugs and ids from your API
-      const res = await fetch(`${baseUrl}/api/getSlugsAndIdsFromDatabase`);
-      const data = await res.json();
+  try {
+    // Fetch the list of slugs and ids
+    const data = await prisma.blogs.findMany({
+      select: {
+        slug: true,
+        id: true,
+      },
+    });
 
-      // Generate an array of paths
-      const paths = data.map(({ slug, id }) => ({
-        params: { slug, id: id.toString() },
-      }));
+    // Generate an array of paths
+    const paths = data.map(({ slug, id }) => ({
+      params: { slug, id: id.toString() },
+    }));
 
-      return {
-        paths,
-        fallback: "blocking",
-      };
-    } catch (error) {
-      console.error("Failed to fetch slugs and ids:", error);
-    }
+    return {
+      paths,
+      fallback: "blocking",
+    };
+  } catch (error) {
+    console.error("Failed to fetch slugs and ids:", error);
   }
-
-  // Return default paths in non-production environments or on error
-  return {
-    paths: [{ params: { slug: "asdf", id: "2" } }],
-    fallback: "blocking",
-  };
 }
 
 export async function getStaticProps({ params }) {
   const { slug, id } = params;
 
   try {
-    // Check if the server is running in production
-    if (process.env.MODE === "production") {
-      const baseUrl = process.env.URL_ORIGIN;
-      try {
-        const res = await fetch(
-          `${baseUrl}/api/getBlogByIdAndSlug?slug=${slug}&id=${id}`
-        );
+    const blogs = await prisma.blogs.findFirst({
+      where: {
+        slug,
+        id: parseInt(id), // Parse the id as an integer
+      },
+    });
 
-        if (!res.ok) {
-          throw new Error(`Request failed with status code ${res.status}`);
-        }
+    const categories = await prisma.categories.findMany();
 
-        const { blogs, categories } = await res.json();
-
-        return {
-          props: {
-            blogs,
-            categories,
-          },
-          revalidate: 60,
-        };
-      } catch (error) {
-        console.error("Failed to fetch blog by ID and slug:", error);
-      }
-    }
+    return {
+      props: {
+        blogs: JSON.stringify(blogs),
+        categories: JSON.stringify(categories),
+      },
+      revalidate: 60,
+    };
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Failed to fetch blog by ID and slug:", error);
   }
-
   // Return default props in non-production environments or on error
   return {
     props: {

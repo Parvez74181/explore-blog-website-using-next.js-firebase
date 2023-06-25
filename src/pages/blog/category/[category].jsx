@@ -8,6 +8,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import swal from "sweetalert";
 import Head from "next/head";
 import axios from "axios";
+import prisma from "../../../../lib/prisma";
+import Button from "../../../../components/Button";
 
 // to get more blogs by InfiniteScroll component
 async function getBlogs(category, page) {
@@ -35,8 +37,8 @@ export default function getPostsByCategory({ blogs }) {
   const [currentLastVisible, setCurrentLastVisible] = useState("");
 
   useEffect(() => {
-    setPostData(blogs);
-  }, []);
+    setPostData(JSON.parse(blogs));
+  }, [blogs]);
 
   // to load more blogs when user approach to the bottom of content
   const loadMoreBlogs = async () => {
@@ -148,24 +150,8 @@ export default function getPostsByCategory({ blogs }) {
                 animationData={animationData}
                 style={{ height: "300px" }}
               />
-              <Link
-                href={`/`}
-                className="inline-flex items-center p-3 px-5 text-sm text-center text-gray-200 bg-slate-700 rounded-lg focus:outline-none hover:bg-slate-800 tracking-wide transition delay-50"
-              >
-                Back to home
-                <svg
-                  aria-hidden="true"
-                  className="w-4 h-4 ml-2 -mr-1"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
+              <Link href={`/`}>
+                <Button text={"Back to home"} />
               </Link>
             </div>
           </>
@@ -176,51 +162,45 @@ export default function getPostsByCategory({ blogs }) {
 }
 
 export async function getStaticPaths() {
-  // Check if the server is running
-  if (process.env.MODE === "production") {
-    const baseUrl = process.env.URL_ORIGIN;
-    // Fetch the list of slugs and ids from your API
-    const res = await fetch(`${baseUrl}/api/getCategoriesNameAndId`);
-    const data = await res.json();
-
-    // Generate an array of paths
-    const paths = data.map(({ name, id }) => ({
-      params: { category: name, id: id.toString() },
-    }));
-
-    return {
-      paths,
-      fallback: "blocking",
-    };
-  }
+  const data = await prisma.categories.findMany({
+    select: {
+      name: true,
+      id: true,
+    },
+  });
+  // Generate an array of paths
+  const paths = data.map(({ name, id }) => ({
+    params: { category: name, id: id.toString() },
+  }));
 
   return {
-    paths: [{ params: { category: 'buddy' } }],
+    paths,
     fallback: "blocking",
   };
 }
 
 export async function getStaticProps({ params }) {
   const { category } = params;
-  let blogs = null;
+  const page = 1;
+  const pageSize = 12;
 
   try {
-    // Check if the server is running
-    if (process.env.MODE === "production") {
-      const baseUrl = process.env.URL_ORIGIN;
-      const res = await fetch(
-        `${baseUrl}/api/getBlogsByCategory?category=${category}&page=1&pageSize=12`
-      );
-
-      if (!res.ok)
-        throw new Error(`Request failed with status code ${res.status}`);
-
-      blogs = await res.json();
-    }
+    const blogs = await prisma.blogs.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      skip: (page - 1) * pageSize, // Calculate the number of items to skip. ex: page is 2 then 2-1 = 1 and finallay pageSize is show many items do I want to show, so 1*pageSize = 1*12 = 12 to skip
+      take: pageSize, // Define the number of items to take per page
+      where: {
+        category: {
+          equals: category,
+        },
+      },
+    });
 
     return {
       props: {
-        blogs,
+        blogs: JSON.stringify(blogs),
       },
       revalidate: 60,
     };

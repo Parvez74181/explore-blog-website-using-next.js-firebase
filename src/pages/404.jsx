@@ -3,6 +3,7 @@ import animationData from "../../public/404.json";
 import Head from "next/head";
 import Button from "../../components/Button";
 import Link from "next/link";
+
 export default function pageNotFound() {
   return (
     <>

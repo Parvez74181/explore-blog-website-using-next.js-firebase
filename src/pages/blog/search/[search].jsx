@@ -8,6 +8,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import Head from "next/head";
 import Button from "../../../../components/Button";
 import axios from "axios";
+import prisma from "../../../../lib/prisma";
 
 // to get more blogs by InfiniteScroll component
 async function getBlogs(search, page) {
@@ -26,6 +27,7 @@ async function getBlogs(search, page) {
     });
   }
 }
+
 export default function getPostsBySearch({ blogs }) {
   const router = useRouter();
   const { search } = router.query;
@@ -34,8 +36,8 @@ export default function getPostsBySearch({ blogs }) {
   const [currentLastVisible, setCurrentLastVisible] = useState(null);
 
   useEffect(() => {
-    setPostData(blogs);
-  }, []);
+    setPostData(JSON.parse(blogs));
+  }, [blogs]);
   // to load more blogs when user approach to the bottom of content
   const loadMoreBlogs = async () => {
     page.current = page.current + 1; // increament the page number
@@ -169,29 +171,39 @@ export async function getStaticPaths() {
   // By setting the paths array to an empty array, Next.js will generate the search pages dynamically based on user input. The fallback: "blocking" option ensures that if a path is not pre-rendered, it will be generated on the server at request time.
 
   return {
-    paths: [{ params: { search: "asdf" } }],
+    paths: [],
     fallback: "blocking",
   };
 }
+
 export async function getStaticProps({ params }) {
   const { search } = params;
-  let blogs = null;
+  const page = 1;
+  const pageSize = 12;
+
   try {
-    // Check if the server is running
-    if (process.env.MODE === "production") {
-      const baseUrl = process.env.URL_ORIGIN;
-      const res = await fetch(
-        `${baseUrl}/api/getBlogsBySearch?search=${search}&page=1&pageSize=12`
-      );
+    const blogs = await prisma.blogs.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      skip: (page - 1) * pageSize, // Calculate the number of items to skip. ex: page is 2 then 2-1 = 1 and finallay pageSize is show many items do I want to show, so 1*pageSize = 1*12 = 12 to skip
+      take: pageSize, // Define the number of items to take per page
+      where: {
+        OR: [
+          { title: search },
+          { category: search },
+          { metaTitle: search },
+          { title: { contains: search } },
+          { tags: { some: { name: search } } },
+          { metaTitle: { contains: search } },
+          { metaDescription: { contains: search } },
+        ],
+      },
+    });
 
-      if (!res.ok)
-        throw new Error(`Request failed with status code ${res.status}`);
-
-      blogs = await res.json();
-    }
     return {
       props: {
-        blogs,
+        blogs: JSON.stringify(blogs),
       },
       revalidate: 60,
     };
